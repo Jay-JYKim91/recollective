@@ -30,6 +30,7 @@ function App() {
 
   return (
     <>
+      <img src="./public/logo.png" width={50} />
       <button className="btn" onClick={handleGoogleLogin}>
         Login
       </button>
