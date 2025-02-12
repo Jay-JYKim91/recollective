@@ -5,7 +5,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        heading: ["Playfair Display", "serif"],
+        body: ["Inter", "sans-serif"],
+        accent: ["Caveat", "cursive"],
+      },
+    },
   },
   plugins: [
     require('daisyui')

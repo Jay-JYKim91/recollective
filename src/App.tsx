@@ -31,6 +31,9 @@ function App() {
   return (
     <>
       <img src="./public/logo.png" width={50} />
+      <h1 className="font-heading">Recollective</h1>
+      <p className="font-body">Recollective</p>
+      <p className="font-accent">Recollective</p>
       <button className="btn" onClick={handleGoogleLogin}>
         Login
       </button>
