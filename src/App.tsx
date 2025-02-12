@@ -1,33 +1,39 @@
 import { useState } from "react"
-import reactLogo from "./assets/react.svg"
-import viteLogo from "/vite.svg"
 import "./App.css"
+import { saveUser, signInWithGoogle } from "./lib/auth"
+import { supabase } from "./lib/supabase"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [message, setMessage] = useState<string>("")
+
+  const handleGoogleLogin = async () => {
+    const result = await signInWithGoogle()
+    if (result?.data) {
+      console.log("data in app.ts", result?.data)
+    }
+    if (result?.error) {
+      console.log("google login error", result?.error.message)
+    }
+
+    supabase.auth.onAuthStateChange(async (_, session) => {
+      if (session?.user) {
+        const result = await saveUser(session?.user)
+
+        if (result === "new_user") {
+          setMessage("회원가입 ㅊㅋㅊㅋ")
+        } else {
+          setMessage("웰컴백!")
+        }
+      }
+    })
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="underline">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button className="btn" onClick={handleGoogleLogin}>
+        Login
+      </button>
+      {message && <p className="mt-4 text-lg font-bold">{message}</p>}
     </>
   )
 }
