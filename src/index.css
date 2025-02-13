@@ -4,5 +4,6 @@
 
 body {
     @apply bg-neutral-gray;
+    @apply font-body;
     height: 100vh;
 }
