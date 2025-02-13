@@ -1,5 +1,5 @@
 import { useState } from "react"
-import "./App.css"
+// import "./App.css"
 import { saveUser, signInWithGoogle } from "./lib/auth"
 import { supabase } from "./lib/supabase"
 
@@ -29,16 +29,19 @@ function App() {
   }
 
   return (
-    <>
-      <img src="./public/logo.png" width={50} />
-      <h1 className="font-heading">Recollective</h1>
-      <p className="font-body">Recollective</p>
-      <p className="font-accent">Recollective</p>
-      <button className="btn" onClick={handleGoogleLogin}>
-        Login
+    <div className="w-full text-center py-40">
+      <div className="flex items-center justify-center">
+        <img src="/logo.png" className="px-4 w-24" />
+        <h1 className="font-heading text-6xl ">Recollective</h1>
+      </div>
+      <p className="font-accent text-4xl py-8">
+        Remember, Reflect, Rediscover.
+      </p>
+      <button className="btn btn-secondary" onClick={handleGoogleLogin}>
+        Log In
       </button>
       {message && <p className="mt-4 text-lg font-bold">{message}</p>}
-    </>
+    </div>
   )
 }
 
