@@ -11,6 +11,17 @@ export const signInWithGoogle = async () => {
   return { data, error }
 }
 
+export const logOut = async (): Promise<{ isLogOut: boolean }> => {
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    console.log("logout error: ", error.message)
+    return { isLogOut: false }
+  }
+
+  return { isLogOut: true }
+}
+
 export const saveUser = async (user: any) => {
   if (!user) return
 

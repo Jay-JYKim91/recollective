@@ -1,5 +1,4 @@
 import { useState } from "react"
-// import "./App.css"
 import { saveUser, signInWithGoogle } from "./lib/auth"
 import { supabase } from "./lib/supabase"
 
