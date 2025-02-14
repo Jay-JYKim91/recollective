@@ -22,36 +22,46 @@ export const logOut = async (): Promise<{ isLogOut: boolean }> => {
   return { isLogOut: true }
 }
 
-export const saveUser = async (user: any) => {
-  if (!user) return
+export const getAndSaveUser = async () => {
+  const { data: userData, error } = await supabase.auth.getUser()
 
-  const { id, email, user_metadata } = user
+  if (error || !userData?.user) {
+    console.error("❌ Failed to retrieve user:", error?.message)
+    return null
+  }
+
+  const { id, email, user_metadata } = userData.user
   const name = user_metadata.full_name
   const avatar_url = user_metadata.avatar_url
 
-  const { data: existingUser, error } = await supabase
-    .from("user")
-    .select("*")
-    .eq("id", id)
-    .single()
-
-  if (error) {
-    console.error("유저 조회 오류???????????:", error.message)
-  }
-
-  if (existingUser) {
-    console.log("🎉 다시 오신 걸 환영합니다!")
-    return "welcome_back"
-  } else {
-    const { error: insertError } = await supabase
+  try {
+    const { data: existingUser, error } = await supabase
       .from("user")
-      .insert([{ id, email, name, avatar_url }])
+      .select("*")
+      .eq("id", id)
+      .single()
 
-    if (insertError) {
-      console.error("유저 저장 오류!!!!!!!!:", insertError.message)
-    } else {
-      console.log("🎊 회원가입을 축하합니다!")
-      return "new_user"
+    if (error) {
+      console.error("유저 조회 오류???????????:", error.message)
     }
+
+    if (existingUser) {
+      console.log("🎉 다시 오신 걸 환영합니다!")
+      return "welcome_back"
+    } else {
+      const { error: insertError } = await supabase
+        .from("user")
+        .insert([{ id, email, name, avatar_url }])
+
+      if (insertError) {
+        console.error("유저 저장 오류!!!!!!!!:", insertError.message)
+      } else {
+        console.log("🎊 회원가입을 축하합니다!")
+        return "new_user"
+      }
+    }
+  } catch (err) {
+    console.error("🚨 saveUser 실행 중 오류 발생:", err)
+    return null
   }
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function Setting() {
   const navigate = useNavigate()
-  const [errorMsg, setErrorMsg] = useState<string>("")
+  const [toastMsg, setToastMsg] = useState<string>("")
 
   const handleLogOut = async () => {
     const result = await logOut()
@@ -12,10 +12,10 @@ export default function Setting() {
     if (result.isLogOut) {
       navigate("/")
     } else {
-      setErrorMsg("Logout failed. Please try again later.")
+      setToastMsg("Logout failed. Please try again later.")
 
       setTimeout(() => {
-        setErrorMsg("")
+        setToastMsg("")
       }, 3000)
     }
   }
@@ -26,10 +26,10 @@ export default function Setting() {
       <button className="btn btn-secondary" onClick={handleLogOut}>
         Log Out
       </button>
-      {errorMsg && (
+      {toastMsg && (
         <div className="toast toast-top toast-end">
           <div className="alert alert-warning">
-            <span>{errorMsg}</span>
+            <span>{toastMsg}</span>
           </div>
         </div>
       )}

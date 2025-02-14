@@ -1,30 +1,20 @@
 import { useState } from "react"
-import { saveUser, signInWithGoogle } from "./lib/auth"
-import { supabase } from "./lib/supabase"
+import { signInWithGoogle } from "./lib/auth"
 
 function App() {
-  const [message, setMessage] = useState<string>("")
+  const [toastMsg, setToastMsg] = useState<string>("")
 
   const handleGoogleLogin = async () => {
     const result = await signInWithGoogle()
-    if (result?.data) {
-      console.log("data in app.ts", result?.data)
-    }
+
     if (result?.error) {
       console.log("google login error", result?.error.message)
+      setToastMsg("Something went wrong. Please try again later.")
+
+      setTimeout(() => {
+        setToastMsg("")
+      }, 3000)
     }
-
-    supabase.auth.onAuthStateChange(async (_, session) => {
-      if (session?.user) {
-        const result = await saveUser(session?.user)
-
-        if (result === "new_user") {
-          setMessage("회원가입 ㅊㅋㅊㅋ")
-        } else {
-          setMessage("웰컴백!")
-        }
-      }
-    })
   }
 
   return (
@@ -39,7 +29,13 @@ function App() {
       <button className="btn btn-secondary" onClick={handleGoogleLogin}>
         Log In
       </button>
-      {message && <p className="mt-4 text-lg font-bold">{message}</p>}
+      {toastMsg && (
+        <div className="toast toast-top toast-end">
+          <div className="alert alert-warning">
+            <span>{toastMsg}</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
