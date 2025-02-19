@@ -1,14 +1,14 @@
-import { useAuth } from "../lib/useAuth"
 import { NavLink, useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth"
 
 export default function Header() {
-  const user = useAuth()
+  const { user } = useAuth()
+
   const navigate = useNavigate()
   const handleLogoClick = () => {
     navigate("/home")
   }
 
-  console.log(">>> header: ", user)
   return (
     <header className="flex px-8 py-6 justify-between">
       <div className="flex items-center" onClick={handleLogoClick}>
@@ -23,6 +23,7 @@ export default function Header() {
           <img
             src={user?.avatar_url || "../avatar_default.svg"}
             className="w-12 rounded-full"
+            alt="avatar"
           />
         </NavLink>
       </div>
