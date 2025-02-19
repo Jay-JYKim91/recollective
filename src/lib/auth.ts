@@ -36,7 +36,7 @@ export const getAndSaveUser = async () => {
 
   try {
     const { data: existingUser, error } = await supabase
-      .from("user")
+      .from("users")
       .select("*")
       .eq("id", id)
       .single()
