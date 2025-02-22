@@ -16,7 +16,9 @@ export default function ProtectedLayout() {
   return (
     <div>
       <Header />
-      <Outlet />
+      <main className="px-8 py-6">
+        <Outlet />
+      </main>
     </div>
   )
 }
