@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { getAndSaveUser } from "../lib/auth"
+import { useAuth } from "../hooks/useAuth"
+import { useNavigate } from "react-router-dom"
 
-export default function Dashboard() {
+export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
+  const navigate = useNavigate()
+
+  const { user } = useAuth()
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -32,7 +37,18 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1>home page</h1>
+      <h1 className="text-center">Hi, {user?.name}</h1>
+      <p className="font-body text-center text-lg">
+        You haven't recorded anything yet!
+      </p>
+      <div className="flex justify-center">
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/records/new")}
+        >
+          + Add New Record
+        </button>
+      </div>
       {toastMsg && (
         <div className="toast toast-top toast-end">
           <div className="alert alert-success">
