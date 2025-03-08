@@ -1,5 +1,36 @@
 import React, { useState } from "react"
 import MovieSearchInput from "../components/MovieSearchInput"
+import { RECORD_TYPES } from "../constants/record_types"
+
+{
+  /* movie, drama */
+}
+{
+  /* user_id, 
+        type_id, 
+        title, 
+        creator, - optional
+        rating, 
+        date, 
+        notes, - optional
+        created_at, 
+        details (running time, episode_count) - optional */
+}
+
+{
+  /* book */
+}
+{
+  /* user_id, 
+        type_id, 
+        title, 
+        creator, - optional
+        rating, 
+        date, 
+        notes, - optional
+        created_at, 
+        details (pages) - optional */
+}
 
 type InputType = {
   type: string
@@ -8,8 +39,10 @@ type InputType = {
   rating: number
   date: string
   notes: string
-  pages: number
-  duration: number
+  pages?: number
+  duration?: number
+  running_time?: number
+  episodes?: number
 }
 
 export default function AddRecord() {
@@ -22,8 +55,11 @@ export default function AddRecord() {
     notes: "",
     pages: 0,
     duration: 0,
+    running_time: 0,
+    episodes: 0,
   })
   const [isReadySearch, setIsReadySearch] = useState(false)
+  const canSubmit = input.type && input.title && input.rating > 0 && input.date
 
   const handleTypeChange = (e) => {
     setInput((prev) => ({
@@ -41,12 +77,10 @@ export default function AddRecord() {
   ) => {
     if ("key" in e) {
       if (e.key === "Enter") {
-        console.log(">>> enter yes")
         setIsReadySearch(true)
         setTimeout(() => setIsReadySearch(false), 1000)
       }
     } else {
-      console.log(">>> enter no")
       setIsReadySearch(false)
       setInput((prev) => ({ ...prev, title: e.target.value }))
     }
@@ -56,6 +90,13 @@ export default function AddRecord() {
     // TODO: Supabase save
     console.log("Saved record:")
   }
+
+  const getTypeName = (id: string): string => {
+    const type = RECORD_TYPES.find((type) => type.id === Number(id))
+
+    return type ? type.name : "stuff"
+  }
+
   return (
     <div>
       <div className="px-0 lg:px-52">
@@ -65,20 +106,20 @@ export default function AddRecord() {
         {/* Record Type */}
         <label className="block mb-2 font-semibold">Select Type:</label>
         <div className="flex flex-wrap gap-4 mb-4">
-          {["movie", "drama", "book"].map((option) => (
+          {RECORD_TYPES.map((option) => (
             <label
-              key={option}
+              key={option.id}
               className="flex items-center gap-2 cursor-pointer"
             >
               <input
                 type="radio"
                 name="recordType"
-                value={option}
-                checked={input.type === option}
+                value={option.id}
+                checked={Number(input.type) === option.id}
                 onChange={handleTypeChange}
                 className="radio radio-primary"
               />
-              <span className="capitalize">{option}</span>
+              <span className="capitalize">{option.name}</span>
             </label>
           ))}
         </div>
@@ -86,19 +127,41 @@ export default function AddRecord() {
         {input.type !== "" && (
           <>
             {/* Title Input */}
-            <MovieSearchInput
+            {/* <MovieSearchInput
               title={input.title}
               isReadySearch={isReadySearch}
               setIsReadySearch={setIsReadySearch}
               handleTitleInput={handleTitleInput}
+            /> */}
+            <label className="block mb-2 font-semibold">Title</label>
+            <input
+              type="text"
+              value={input.title}
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+              placeholder={`Enter the title of the ${getTypeName(input.type)}`}
+              className="input input-bordered w-full mb-4"
             />
 
-            <label className="block mb-2 font-semibold">Creator:</label>
+            <label className="block mb-2 font-semibold">
+              {input.type === "1" ? "Writer:" : "Director"}
+            </label>
             <input
               type="text"
               value={input.creator}
-              readOnly
-              placeholder="Auto-filled creator"
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  creator: e.target.value,
+                }))
+              }
+              placeholder={`Enter the ${
+                input.type === "1" ? "writer" : "director"
+              }'s name`}
               className="input input-bordered w-full mb-4"
             />
 
@@ -126,19 +189,10 @@ export default function AddRecord() {
                 setInput((prev) => ({ ...prev, date: e.target.value }))
               }
               className="input input-bordered w-full mb-4"
+              max={new Date().toISOString().split("T")[0]}
             />
 
-            <label className="block mb-2 font-semibold">Notes:</label>
-            <textarea
-              value={input.notes}
-              onChange={(e) =>
-                setInput((prev) => ({ ...prev, notes: e.target.value }))
-              }
-              className="textarea textarea-bordered w-full mb-4"
-              placeholder="Add any notes..."
-            ></textarea>
-
-            {input.type === "book" && (
+            {input.type === "1" && (
               <div className="mb-4">
                 <label className="block mb-2 font-semibold">Pages:</label>
                 <input
@@ -151,23 +205,23 @@ export default function AddRecord() {
                     }))
                   }
                   className="input input-bordered w-full"
-                  placeholder="Enter number of pages"
+                  placeholder="Enter the total number of pages"
                 />
               </div>
             )}
 
-            {(input.type === "movie" || input.type === "drama") && (
+            {(input.type === "2" || input.type === "3") && (
               <div className="mb-4">
                 <label className="block mb-2 font-semibold">
-                  Duration (minutes):
+                  Running Time (minutes):
                 </label>
                 <input
                   type="number"
-                  value={input.duration}
+                  value={input.running_time}
                   onChange={(e) =>
                     setInput((prev) => ({
                       ...prev,
-                      duration: Number(e.target.value),
+                      running_time: Number(e.target.value),
                     }))
                   }
                   className="input input-bordered w-full"
@@ -175,13 +229,43 @@ export default function AddRecord() {
                 />
               </div>
             )}
+
+            {input.type === "2" && (
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold">
+                  Number of Episodes:
+                </label>
+                <input
+                  type="number"
+                  value={input.episodes}
+                  onChange={(e) =>
+                    setInput((prev) => ({
+                      ...prev,
+                      episodes: Number(e.target.value),
+                    }))
+                  }
+                  className="input input-bordered w-full"
+                  placeholder="Enter the total number of episodes"
+                />
+              </div>
+            )}
+
+            <label className="block mb-2 font-semibold">Notes:</label>
+            <textarea
+              value={input.notes}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, notes: e.target.value }))
+              }
+              className="textarea textarea-bordered w-full mb-4"
+              placeholder="Add any notes..."
+            ></textarea>
           </>
         )}
 
         <button
           onClick={handleSave}
           className="btn btn-primary w-full"
-          disabled
+          disabled={!canSubmit}
         >
           Save Record
         </button>
