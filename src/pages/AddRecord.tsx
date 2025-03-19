@@ -1,36 +1,10 @@
 import React, { useState } from "react"
 import MovieSearchInput from "../components/MovieSearchInput"
 import { RECORD_TYPES } from "../constants/record_types"
-
-{
-  /* movie, drama */
-}
-{
-  /* user_id, 
-        type_id, 
-        title, 
-        creator, - optional
-        rating, 
-        date, 
-        notes, - optional
-        created_at, 
-        details (running time, episode_count) - optional */
-}
-
-{
-  /* book */
-}
-{
-  /* user_id, 
-        type_id, 
-        title, 
-        creator, - optional
-        rating, 
-        date, 
-        notes, - optional
-        created_at, 
-        details (pages) - optional */
-}
+import { useRecords } from "../hooks/useRecords"
+import { useAuth } from "../hooks/useAuth"
+import GenreSelector from "../components/GenreSelector"
+import { useNavigate } from "react-router-dom"
 
 type InputType = {
   type: string
@@ -59,7 +33,11 @@ export default function AddRecord() {
     episodes: 0,
   })
   const [isReadySearch, setIsReadySearch] = useState(false)
+  const [selectedGenres, SetSelectedGenres] = useState<number[]>([])
   const canSubmit = input.type && input.title && input.rating > 0 && input.date
+  const navigate = useNavigate()
+  const { addRecord } = useRecords()
+  const { user } = useAuth()
 
   const handleTypeChange = (e) => {
     setInput((prev) => ({
@@ -87,8 +65,41 @@ export default function AddRecord() {
   }
 
   const handleSave = () => {
-    // TODO: Supabase save
-    console.log("Saved record:")
+    if (!user) return
+
+    let details
+    if (input.type === "1") {
+      details = {
+        pages: input.pages,
+      }
+    } else if (input.type === "2") {
+      details = {
+        running_time: input.running_time,
+        episode_count: input.episodes,
+      }
+    } else if (input.type === "3") {
+      details = {
+        running_time: input.running_time,
+      }
+    }
+
+    const newRecord = {
+      user_id: user.user_id,
+      title: input.title,
+      creator: input.creator,
+      rating: input.rating,
+      date: new Date(input.date),
+      notes: input.notes,
+      type_id: Number(input.type),
+      details: JSON.stringify(details),
+    }
+
+    console.log("Saved record:", newRecord, selectedGenres)
+    addRecord.mutate({
+      newRecord,
+      genres: selectedGenres,
+      callback: () => navigate("/records"),
+    })
   }
 
   const getTypeName = (id: string): string => {
@@ -163,6 +174,12 @@ export default function AddRecord() {
                 input.type === "1" ? "writer" : "director"
               }'s name`}
               className="input input-bordered w-full mb-4"
+            />
+
+            <GenreSelector
+              selectedGenres={selectedGenres}
+              setSelectedGenres={SetSelectedGenres}
+              record_type={input.type}
             />
 
             <label className="block mb-2 font-semibold">Rating:</label>

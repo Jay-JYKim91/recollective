@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!supabaseUser) return null
 
     return {
+      user_id: supabaseUser.id,
       name: supabaseUser.user_metadata?.name ?? "Unknown",
       email: supabaseUser.email ?? "",
       avatar_url: supabaseUser.user_metadata?.avatar_url ?? "",
