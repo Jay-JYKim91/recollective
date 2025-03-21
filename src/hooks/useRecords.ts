@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "../lib/supabase"
 
 type RecordType = {
@@ -14,6 +14,22 @@ type RecordType = {
 
 export const useRecords = () => {
   const queryClient = useQueryClient()
+
+  const useUserRecords = (userId: string) =>
+    useQuery({
+      queryKey: ["records", userId],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("records")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: true })
+
+        if (error) throw error
+        return data
+      },
+      enabled: !!userId,
+    })
 
   const addRecord = useMutation<
     null,
@@ -52,5 +68,5 @@ export const useRecords = () => {
     },
   })
 
-  return { addRecord }
+  return { addRecord, useUserRecords }
 }
