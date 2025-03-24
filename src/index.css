@@ -5,5 +5,6 @@
 body {
     @apply bg-neutral-gray;
     @apply font-body;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
 }

@@ -31,6 +31,29 @@ export const useRecords = () => {
       enabled: !!userId,
     })
 
+  const useRecord = (id: string) => {
+    return useQuery({
+      queryKey: ["record", id],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("records")
+          .select(
+            `*, 
+            record_genres (
+              genre_id
+            )
+            `
+          )
+          .eq("id", id)
+          .single()
+
+        if (error) throw error
+        return data
+      },
+      enabled: !!id,
+    })
+  }
+
   const addRecord = useMutation<
     null,
     Error,
@@ -68,5 +91,5 @@ export const useRecords = () => {
     },
   })
 
-  return { addRecord, useUserRecords }
+  return { addRecord, useUserRecords, useRecord }
 }
