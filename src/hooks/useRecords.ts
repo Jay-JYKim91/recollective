@@ -91,5 +91,23 @@ export const useRecords = () => {
     },
   })
 
-  return { addRecord, useUserRecords, useRecord }
+  const deleteRecord = useMutation<
+    void,
+    Error,
+    { id: string | undefined; callback?: () => void }
+  >({
+    mutationFn: async ({ id }) => {
+      if (!id) return
+
+      const { error } = await supabase.from("records").delete().eq("id", id)
+
+      if (error) throw error
+    },
+    onSuccess: (_, { callback }) => {
+      queryClient.invalidateQueries({ queryKey: ["records"] })
+      if (callback) callback()
+    },
+  })
+
+  return { addRecord, useUserRecords, useRecord, deleteRecord }
 }
