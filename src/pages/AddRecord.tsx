@@ -98,7 +98,14 @@ export default function AddRecord() {
     addRecord.mutate({
       newRecord,
       genres: selectedGenres,
-      callback: () => navigate("/records"),
+      callback: () =>
+        navigate("/records", {
+          state: {
+            showToast: true,
+            toastMessage: "New record added!",
+          },
+          replace: true,
+        }),
     })
   }
 

@@ -15,7 +15,14 @@ export default function RecordDetail() {
   const handleDelete = () => {
     deleteRecord.mutate({
       id: id,
-      callback: () => navigate("/records"),
+      callback: () =>
+        navigate("/records", {
+          state: {
+            showToast: true,
+            toastMessage: "Record deleted successfully!",
+          },
+          replace: true,
+        }),
     })
   }
 
