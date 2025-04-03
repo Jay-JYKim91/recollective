@@ -26,25 +26,37 @@ export default function RecordDetail() {
     })
   }
 
+  const handleEdit = () => {
+    navigate(`/records/${id}/edit`)
+  }
+
+  if (isLoading) return <p>Loading...</p>
+
   if (!id || !record)
     return <p>Oops! Something went wrong. Please try again.</p>
 
-  return isLoading ? (
-    <p>Loading...</p>
-  ) : (
+  return (
     <div className="max-w-3xl mx-auto mt-10 px-4">
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
           <div className="card-actions justify-between">
             <button
               className="btn btn-primary btn-sm"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/records", { replace: true })}
             >
               ← Back
             </button>
-            <label htmlFor="delete_modal" className="btn btn-error btn-sm">
-              Delete
-            </label>
+            <div className="display">
+              <button
+                className="btn btn-secondary btn-sm mr-2"
+                onClick={handleEdit}
+              >
+                Edit
+              </button>
+              <label htmlFor="delete_modal" className="btn btn-error btn-sm">
+                Delete
+              </label>
+            </div>
           </div>
           <h2 className="card-title text-3xl font-body">
             <RecordIcon typeId={record.type_id} /> {record.title}

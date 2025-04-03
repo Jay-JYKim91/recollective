@@ -32,6 +32,7 @@ export default function GenreSelector({
       <div className="flex flex-wrap gap-2">
         {filtered_genre.map((genre) => (
           <button
+            type="button"
             key={genre.id}
             onClick={() => toggleGenre(genre.id)}
             className={`px-4 py-2 rounded-lg border ${
