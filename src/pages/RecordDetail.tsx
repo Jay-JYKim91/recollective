@@ -4,6 +4,8 @@ import { FaBookOpen, FaCalendar, FaClock } from "react-icons/fa"
 import { getGenreName, getTimeText } from "../utils/common"
 import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
+import { useState } from "react"
+import { usePageToast } from "../hooks/usePageToast"
 
 export default function RecordDetail() {
   const { id } = useParams()
@@ -11,6 +13,8 @@ export default function RecordDetail() {
   const { useRecord, deleteRecord } = useRecords()
   const { data: record, isLoading } = useRecord(id || "")
   const details = record?.details ? JSON.parse(record?.details) : {}
+  const [showToast, setShowToast] = useState(false)
+  const toastMessage = usePageToast(setShowToast)
 
   const handleDelete = () => {
     deleteRecord.mutate({
@@ -37,6 +41,13 @@ export default function RecordDetail() {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 px-4">
+      {showToast && (
+        <div className="toast toast-top toast-end z-50">
+          <div className="alert alert-success">
+            <span>{toastMessage}</span>
+          </div>
+        </div>
+      )}
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
           <div className="card-actions justify-between">

@@ -1,32 +1,25 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
 import { useAuth } from "../hooks/useAuth"
 import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { usePageToast } from "../hooks/usePageToast"
 
 export default function Records() {
   const navigate = useNavigate()
-  const location = useLocation()
   const { useUserRecords } = useRecords()
   const { user } = useAuth()
   const { data: records, isLoading } = useUserRecords(user?.user_id || "")
   const [showToast, setShowToast] = useState(false)
-
-  useEffect(() => {
-    if (location.state?.showToast && location.state?.toastMessage !== "") {
-      setShowToast(true)
-
-      setTimeout(() => setShowToast(false), 3000)
-    }
-  }, [location.state])
+  const toastMessage = usePageToast(setShowToast)
 
   return (
     <div>
       {showToast && (
         <div className="toast toast-top toast-end z-50">
           <div className="alert alert-success">
-            <span>{location.state?.toastMessage}</span>
+            <span>{toastMessage}</span>
           </div>
         </div>
       )}
