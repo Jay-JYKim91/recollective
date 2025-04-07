@@ -86,23 +86,28 @@ export default function EditRecord() {
   }
 
   return (
-    <div>
-      <div className="px-0 lg:px-52">
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => navigate("/records", { replace: true })}
-        >
-          ← Back
-        </button>
-        <h1 className="font-heading font-bold text-center text-xl">
-          Edit Record
-        </h1>
-        <RecordForm
-          initialValues={existingInput}
-          initialGenres={existingGenres}
-          onSubmit={handleEdit}
-          submitLabel={"Edit Record"}
-        />
+    <div className="max-w-3xl mx-auto mt-10 px-4">
+      <div className="card shadow-xl bg-base-100">
+        <div className="card-body">
+          <div className="card-actions justify-between">
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => navigate("/records", { replace: true })}
+            >
+              ← Back
+            </button>
+          </div>
+
+          <h1 className="font-heading font-bold text-center text-xl">
+            Edit Record
+          </h1>
+          <RecordForm
+            initialValues={existingInput}
+            initialGenres={existingGenres}
+            onSubmit={handleEdit}
+            submitLabel={"Edit Record"}
+          />
+        </div>
       </div>
     </div>
   )

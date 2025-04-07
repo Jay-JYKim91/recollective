@@ -73,16 +73,27 @@ export default function AddRecord() {
   }
 
   return (
-    <div>
-      <div className="px-0 lg:px-52">
-        <h1 className="font-heading font-bold text-center text-xl">
-          Add New Record
-        </h1>
-        <RecordForm
-          initialValues={emptyInput}
-          onSubmit={handleSave}
-          submitLabel={"Save Record"}
-        />
+    <div className="max-w-3xl mx-auto mt-10 px-4">
+      <div className="card shadow-xl bg-base-100">
+        <div className="card-body">
+          <div className="card-actions justify-between">
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => navigate("/records", { replace: true })}
+            >
+              ← Back
+            </button>
+          </div>
+
+          <h1 className="font-heading font-bold text-center text-xl">
+            Add New Record
+          </h1>
+          <RecordForm
+            initialValues={emptyInput}
+            onSubmit={handleSave}
+            submitLabel={"Save Record"}
+          />
+        </div>
       </div>
     </div>
   )
