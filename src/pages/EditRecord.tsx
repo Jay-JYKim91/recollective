@@ -1,12 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
 import RecordForm from "../components/RecordForm"
+import { RecordFormInputType } from "../types/types"
+import { useAuth } from "../hooks/useAuth"
 
 export default function EditRecord() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { useRecord } = useRecords()
+  const { useRecord, updateRecord } = useRecords()
   const { data: record, isLoading } = useRecord(id || "")
+  const { user } = useAuth()
 
   if (isLoading) return <p>is Loading...</p>
   if (!id || !record)
@@ -30,7 +33,57 @@ export default function EditRecord() {
       (genre: { genre_id: number }) => genre.genre_id
     ) || []
 
-  const handleEdit = () => {}
+  const handleEdit = ({
+    input,
+    selectedGenres,
+  }: {
+    input: RecordFormInputType
+    selectedGenres: number[]
+  }) => {
+    if (!user) return
+
+    let details
+    if (input.type === "1") {
+      details = {
+        pages: input.pages,
+      }
+    } else if (input.type === "2") {
+      details = {
+        running_time: input.running_time,
+        episode_count: input.episodes,
+      }
+    } else if (input.type === "3") {
+      details = {
+        running_time: input.running_time,
+      }
+    }
+
+    const updatedRecord = {
+      user_id: user.user_id,
+      title: input.title,
+      creator: input.creator,
+      rating: input.rating,
+      date: new Date(input.date),
+      notes: input.notes,
+      type_id: Number(input.type),
+      details: JSON.stringify(details),
+    }
+
+    updateRecord.mutate({
+      id,
+      updatedRecord,
+      genres: selectedGenres,
+      callback: () => {
+        navigate(`/records/${id}`, {
+          state: {
+            showToast: true,
+            toastMessage: "Record updated!",
+          },
+          replace: true,
+        })
+      },
+    })
+  }
 
   return (
     <div>

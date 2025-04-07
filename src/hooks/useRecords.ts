@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "../lib/supabase"
+import { RecordFormInputType } from "../types/types"
 
 type RecordType = {
   user_id: string
@@ -85,9 +86,56 @@ export const useRecords = () => {
     },
 
     onSuccess: (_, variables) => {
-      console.log(">>> success!")
       variables.callback()
       queryClient.invalidateQueries({ queryKey: ["records"] })
+    },
+  })
+
+  const updateRecord = useMutation<
+    null,
+    Error,
+    {
+      id: string
+      updatedRecord: RecordType
+      genres: number[]
+      callback: () => void
+    }
+  >({
+    mutationFn: async ({ id, updatedRecord, genres }) => {
+      const { error: recordError } = await supabase
+        .from("records")
+        .update(updatedRecord)
+        .eq("id", id)
+
+      if (recordError) throw recordError
+
+      const { error: deleteGenreError } = await supabase
+        .from("record_genres")
+        .delete()
+        .eq("record_id", id)
+
+      if (deleteGenreError) throw deleteGenreError
+
+      if (genres.length > 0) {
+        const genreEntries = genres.map((genre_id) => ({
+          record_id: id,
+          genre_id: genre_id,
+        }))
+
+        const { error: insertGenreError } = await supabase
+          .from("record_genres")
+          .insert(genreEntries)
+
+        if (insertGenreError) throw insertGenreError
+      }
+
+      return null
+    },
+
+    onSuccess: (_, variables) => {
+      variables.callback()
+      queryClient.invalidateQueries({ queryKey: ["records"] })
+      queryClient.invalidateQueries({ queryKey: ["record", variables.id] })
     },
   })
 
@@ -109,5 +157,5 @@ export const useRecords = () => {
     },
   })
 
-  return { addRecord, useUserRecords, useRecord, deleteRecord }
+  return { addRecord, useUserRecords, useRecord, deleteRecord, updateRecord }
 }
