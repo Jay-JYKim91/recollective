@@ -2,12 +2,12 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
 import { FaBookOpen, FaCalendar, FaClock } from "react-icons/fa"
 import { getGenreName, getTimeText } from "../utils/common"
-import RecordIcon from "../components/RecordIcon"
-import StarRating from "../components/StarRating"
+import RecordIcon from "../components/ui/RecordIcon"
+import StarRating from "../components/ui/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
-import Toast from "../components/Toast"
-import LoadingCircle from "../components/LoadingCircle"
+import Toast from "../components/ui/Toast"
+import LoadingCircle from "../components/ui/LoadingCircle"
 
 export default function RecordDetail() {
   const { id } = useParams()

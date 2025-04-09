@@ -1,6 +1,6 @@
 import { AiOutlineEnter } from "react-icons/ai"
 import { useMovieSearch } from "../hooks/useMovieSearch"
-import LoadingCircle from "./LoadingCircle"
+import LoadingCircle from "./ui/LoadingCircle"
 
 export default function MovieSearchInput({
   title,

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { signInWithGoogle } from "./lib/auth"
-import Toast from "./components/Toast"
+import Toast from "./components/ui/Toast"
 
 function App() {
   const [toastMsg, setToastMsg] = useState<string>("")

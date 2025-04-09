@@ -3,7 +3,7 @@ import { useRecords } from "../hooks/useRecords"
 import RecordForm from "../components/RecordForm"
 import { RecordFormInputType } from "../types/types"
 import { useAuth } from "../hooks/useAuth"
-import LoadingCircle from "../components/LoadingCircle"
+import LoadingCircle from "../components/ui/LoadingCircle"
 
 export default function EditRecord() {
   const { id } = useParams()

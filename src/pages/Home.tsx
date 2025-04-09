@@ -4,10 +4,10 @@ import { getAndSaveUser } from "../lib/auth"
 import { useAuth } from "../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
-import RecordIcon from "../components/RecordIcon"
-import StarRating from "../components/StarRating"
-import Toast from "../components/Toast"
-import LoadingCircle from "../components/LoadingCircle"
+import RecordIcon from "../components/ui/RecordIcon"
+import StarRating from "../components/ui/StarRating"
+import Toast from "../components/ui/Toast"
+import LoadingCircle from "../components/ui/LoadingCircle"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")

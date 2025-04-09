@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { logOut } from "../lib/auth"
 import { useNavigate } from "react-router-dom"
-import Toast from "../components/Toast"
+import Toast from "../components/ui/Toast"
 
 export default function Setting() {
   const navigate = useNavigate()

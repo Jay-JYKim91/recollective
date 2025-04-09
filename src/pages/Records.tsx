@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
 import { useAuth } from "../hooks/useAuth"
-import RecordIcon from "../components/RecordIcon"
-import StarRating from "../components/StarRating"
+import RecordIcon from "../components/ui/RecordIcon"
+import StarRating from "../components/ui/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
-import Toast from "../components/Toast"
-import LoadingCircle from "../components/LoadingCircle"
+import Toast from "../components/ui/Toast"
+import LoadingCircle from "../components/ui/LoadingCircle"
 
 export default function Records() {
   const navigate = useNavigate()

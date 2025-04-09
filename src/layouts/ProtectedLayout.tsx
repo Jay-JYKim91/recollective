@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
 import Header from "../components/Header"
 import { useAuth } from "../hooks/useAuth"
-import LoadingCircle from "../components/LoadingCircle"
+import LoadingCircle from "../components/ui/LoadingCircle"
 
 export default function ProtectedLayout() {
   const { isLoading, isAuthenticated } = useAuth()
