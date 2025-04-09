@@ -7,6 +7,7 @@ import StarRating from "../components/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
 import Toast from "../components/Toast"
+import LoadingCircle from "../components/LoadingCircle"
 
 export default function RecordDetail() {
   const { id } = useParams()
@@ -35,7 +36,7 @@ export default function RecordDetail() {
     navigate(`/records/${id}/edit`)
   }
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <LoadingCircle />
 
   if (!id || !record)
     return <p>Oops! Something went wrong. Please try again.</p>

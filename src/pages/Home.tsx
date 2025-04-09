@@ -7,6 +7,7 @@ import { useRecords } from "../hooks/useRecords"
 import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
 import Toast from "../components/Toast"
+import LoadingCircle from "../components/LoadingCircle"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -44,7 +45,7 @@ export default function Home() {
     <div>
       <h1 className="text-center">Hi, {user?.name}</h1>
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingCircle />
       ) : records && records.length > 0 ? (
         <ul className="divide-y divide-gray-200">
           {records?.map((record) => {

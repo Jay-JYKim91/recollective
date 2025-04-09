@@ -3,6 +3,7 @@ import { useRecords } from "../hooks/useRecords"
 import RecordForm from "../components/RecordForm"
 import { RecordFormInputType } from "../types/types"
 import { useAuth } from "../hooks/useAuth"
+import LoadingCircle from "../components/LoadingCircle"
 
 export default function EditRecord() {
   const { id } = useParams()
@@ -11,7 +12,7 @@ export default function EditRecord() {
   const { data: record, isLoading } = useRecord(id || "")
   const { user } = useAuth()
 
-  if (isLoading) return <p>is Loading...</p>
+  if (isLoading) return <LoadingCircle />
   if (!id || !record)
     return <p>Oops! Something went wrong. Please try again.</p>
 

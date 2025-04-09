@@ -1,5 +1,6 @@
 import { AiOutlineEnter } from "react-icons/ai"
 import { useMovieSearch } from "../hooks/useMovieSearch"
+import LoadingCircle from "./LoadingCircle"
 
 export default function MovieSearchInput({
   title,
@@ -41,7 +42,7 @@ export default function MovieSearchInput({
         </button>
       </div>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <LoadingCircle />}
       {error && <p>Error: {error.message}</p>}
       <p>hi {data?.actors}</p>
     </>

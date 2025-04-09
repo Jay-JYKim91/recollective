@@ -6,6 +6,7 @@ import StarRating from "../components/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
 import Toast from "../components/Toast"
+import LoadingCircle from "../components/LoadingCircle"
 
 export default function Records() {
   const navigate = useNavigate()
@@ -23,7 +24,7 @@ export default function Records() {
       </h1>
 
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingCircle />
       ) : records && records.length > 0 ? (
         <>
           <div className="flex justify-end mb-4">
