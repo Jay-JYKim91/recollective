@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { signInWithGoogle } from "./lib/auth"
+import Toast from "./components/Toast"
 
 function App() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -29,13 +30,7 @@ function App() {
       <button className="btn btn-secondary" onClick={handleGoogleLogin}>
         Log In
       </button>
-      {toastMsg && (
-        <div className="toast toast-top toast-end">
-          <div className="alert alert-warning">
-            <span>{toastMsg}</span>
-          </div>
-        </div>
-      )}
+      {toastMsg && <Toast toastMessage={toastMsg} toastType="alert-warning" />}
     </div>
   )
 }

@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom"
 
 export const usePageToast = (
   setToastVisible: (value: boolean) => void
-): string | null => {
+): string => {
   const location = useLocation()
-  const message = location?.state?.toastMessage || null
+  const message = location?.state?.toastMessage || ""
   const shouldShow = location?.state?.showToast
 
   useEffect(() => {

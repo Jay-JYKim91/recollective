@@ -5,6 +5,7 @@ import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
+import Toast from "../components/Toast"
 
 export default function Records() {
   const navigate = useNavigate()
@@ -16,13 +17,7 @@ export default function Records() {
 
   return (
     <div>
-      {showToast && (
-        <div className="toast toast-top toast-end z-50">
-          <div className="alert alert-success">
-            <span>{toastMessage}</span>
-          </div>
-        </div>
-      )}
+      {showToast && <Toast toastMessage={toastMessage} />}
       <h1 className="font-heading font-bold text-center text-xl mb-4">
         Your Records
       </h1>

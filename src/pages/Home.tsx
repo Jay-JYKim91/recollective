@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
 import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
+import Toast from "../components/Toast"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -87,13 +88,7 @@ export default function Home() {
         </>
       )}
 
-      {toastMsg && (
-        <div className="toast toast-top toast-end">
-          <div className="alert alert-success">
-            <span>{toastMsg}</span>
-          </div>
-        </div>
-      )}
+      {toastMsg && <Toast toastMessage={toastMsg} />}
     </div>
   )
 }

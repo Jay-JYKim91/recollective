@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { logOut } from "../lib/auth"
 import { useNavigate } from "react-router-dom"
+import Toast from "../components/Toast"
 
 export default function Setting() {
   const navigate = useNavigate()
@@ -26,13 +27,7 @@ export default function Setting() {
       <button className="btn btn-secondary" onClick={handleLogOut}>
         Log Out
       </button>
-      {toastMsg && (
-        <div className="toast toast-top toast-end">
-          <div className="alert alert-warning">
-            <span>{toastMsg}</span>
-          </div>
-        </div>
-      )}
+      {toastMsg && <Toast toastMessage={toastMsg} toastType="alert-warning" />}
     </div>
   )
 }

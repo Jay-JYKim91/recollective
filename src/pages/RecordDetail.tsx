@@ -6,6 +6,7 @@ import RecordIcon from "../components/RecordIcon"
 import StarRating from "../components/StarRating"
 import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
+import Toast from "../components/Toast"
 
 export default function RecordDetail() {
   const { id } = useParams()
@@ -41,13 +42,7 @@ export default function RecordDetail() {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 px-4">
-      {showToast && (
-        <div className="toast toast-top toast-end z-50">
-          <div className="alert alert-success">
-            <span>{toastMessage}</span>
-          </div>
-        </div>
-      )}
+      {showToast && <Toast toastMessage={toastMessage} />}
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
           <div className="card-actions justify-between">
