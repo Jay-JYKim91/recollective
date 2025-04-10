@@ -1,9 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signInWithGoogle } from "./lib/auth"
 import Toast from "./components/ui/Toast"
 
 function App() {
   const [toastMsg, setToastMsg] = useState<string>("")
+
+  useEffect(() => {
+    const theme = localStorage.getItem("theme")
+
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [])
 
   const handleGoogleLogin = async () => {
     const result = await signInWithGoogle()
