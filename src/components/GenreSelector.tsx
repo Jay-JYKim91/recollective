@@ -1,7 +1,7 @@
 import React from "react"
 import { GENRES } from "../constants/genres"
 
-type PropType = {
+type GenreSelectorProps = {
   record_type: string
   selectedGenres: number[]
   setSelectedGenres: React.Dispatch<React.SetStateAction<number[]>>
@@ -11,7 +11,7 @@ export default function GenreSelector({
   record_type,
   selectedGenres,
   setSelectedGenres,
-}: PropType) {
+}: GenreSelectorProps) {
   const toggleGenre = (genreId: number) => {
     setSelectedGenres((prev) =>
       prev.includes(genreId)

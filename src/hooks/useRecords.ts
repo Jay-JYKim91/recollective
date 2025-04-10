@@ -1,17 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "../lib/supabase"
-import { RecordFormInputType } from "../types/types"
-
-type RecordType = {
-  user_id: string
-  title: string
-  creator: string
-  rating: number
-  date: object
-  notes: string
-  type_id: number
-  details: string
-}
+import { RecordType } from "../types/types"
 
 export const useRecords = () => {
   const queryClient = useQueryClient()

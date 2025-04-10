@@ -4,20 +4,20 @@ import { useNavigate } from "react-router-dom"
 import RecordForm from "../components/RecordForm"
 import { RecordFormInputType } from "../types/types"
 
-export default function AddRecord() {
-  const emptyInput = {
-    type: "",
-    title: "",
-    creator: "",
-    rating: 0,
-    date: "",
-    notes: "",
-    pages: 0,
-    duration: 0,
-    running_time: 0,
-    episodes: 0,
-  }
+const INITIAL_VALUES = {
+  type: "",
+  title: "",
+  creator: "",
+  rating: 0,
+  date: "",
+  notes: "",
+  pages: 0,
+  duration: 0,
+  running_time: 0,
+  episodes: 0,
+}
 
+export default function AddRecord() {
   const navigate = useNavigate()
   const { addRecord } = useRecords()
   const { user } = useAuth()
@@ -89,7 +89,7 @@ export default function AddRecord() {
             Add New Record
           </h1>
           <RecordForm
-            initialValues={emptyInput}
+            initialValues={INITIAL_VALUES}
             onSubmit={handleSave}
             submitLabel={"Save Record"}
           />
