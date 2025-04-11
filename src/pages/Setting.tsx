@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { logOut } from "../lib/auth"
 import { useNavigate } from "react-router-dom"
 import Toast from "../components/ui/Toast"
@@ -8,9 +8,12 @@ export default function Setting() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [toastMsg, setToastMsg] = useState<string>("")
-  const [isDark, setIsDark] = useState(
-    (localStorage.getItem("theme") ?? "cupcake") === "dark"
-  )
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "cupcake"
+    setIsDarkMode(savedTheme === "dark")
+  }, [])
 
   const handleLogOut = async () => {
     const result = await logOut()
@@ -26,21 +29,11 @@ export default function Setting() {
     }
   }
 
-  const toggleDarkMode = () => {
-    const html = document.documentElement
-    const isDark = html.classList.contains("dark")
-
-    if (isDark) {
-      html.classList.remove("dark")
-      html.setAttribute("data-theme", "cupcake")
-      localStorage.setItem("theme", "cupcake")
-      setIsDark(false)
-    } else {
-      html.classList.add("dark")
-      html.setAttribute("data-theme", "dark")
-      localStorage.setItem("theme", "dark")
-      setIsDark(true)
-    }
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "cupcake" : "dark"
+    setIsDarkMode(!isDarkMode)
+    localStorage.setItem("theme", newTheme)
+    document.documentElement.setAttribute("data-theme", newTheme)
   }
 
   return (
@@ -58,7 +51,7 @@ export default function Setting() {
           </div>
         </div>
 
-        <div className="card shadow-md bg-base-100">
+        <div className="card shadow-md bg-base-100 mb-8">
           <div className="card-body">
             <h2 className="card-title">Preferences</h2>
             {/* <p>Default Record Type</p> */}
@@ -67,16 +60,31 @@ export default function Setting() {
               <input
                 type="checkbox"
                 className="toggle"
-                checked={isDark}
-                onChange={toggleDarkMode}
+                checked={isDarkMode}
+                onChange={toggleTheme}
               />
               <span>Enable Dark Mode</span>
             </label>
           </div>
         </div>
-        <button className="btn btn-secondary mt-8" onClick={handleLogOut}>
-          Log Out
-        </button>
+
+        <div className="card shadow-md bg-base-100">
+          <div className="card-body">
+            <h2 className="card-title">Account Actions</h2>
+
+            <div className="flex flex-col gap-2">
+              <button
+                className="btn btn-sm btn-secondary"
+                onClick={handleLogOut}
+              >
+                Log Out
+              </button>
+              {/* <button className="btn btn-sm btn-warning" onClick={handleLogOut}>
+                Delete Account
+              </button> */}
+            </div>
+          </div>
+        </div>
       </div>
 
       {toastMsg && <Toast toastMessage={toastMsg} toastType="alert-warning" />}

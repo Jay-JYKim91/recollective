@@ -37,7 +37,7 @@ function App() {
       <p className="font-accent text-4xl py-8">
         Remember, Reflect, Rediscover.
       </p>
-      <button className="btn btn-secondary" onClick={handleGoogleLogin}>
+      <button className="btn btn-primary" onClick={handleGoogleLogin}>
         Log In
       </button>
       {toastMsg && <Toast toastMessage={toastMsg} toastType="alert-warning" />}
