@@ -7,30 +7,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  const formatUserInfo = (supabaseUser: SupabaseUser | null): User | null => {
-    if (!supabaseUser) return null
-
-    return {
-      user_id: supabaseUser.id,
-      name: supabaseUser.user_metadata?.name ?? "Unknown",
-      email: supabaseUser.email ?? "",
-      avatar_url: supabaseUser.user_metadata?.avatar_url ?? "",
-    }
-  }
-
   useEffect(() => {
-    const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      setUser(formatUserInfo(session?.user ?? null))
-      setIsLoading(false)
-    }
+    const init = async () => await refreshUser()
 
-    getSession()
+    init()
 
     const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(formatUserInfo(session?.user ?? null))
+      if (session?.user) {
+        const handleRefresh = async () => await refreshUser()
+
+        handleRefresh()
+      } else {
+        setUser(null)
+      }
     })
 
     return () => {
@@ -38,8 +27,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
+  const refreshUser = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    const authUser = session?.user
+    if (!authUser) {
+      setUser(null)
+      setIsLoading(false)
+      return
+    }
+
+    const { data: userData, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", authUser.id)
+      .single()
+
+    if (error) {
+      console.error("Failed to fetch user profile:", error)
+      setUser(null)
+    } else {
+      setUser({
+        user_id: authUser.id,
+        name: authUser.user_metadata?.name ?? "Unknown",
+        email: authUser.email ?? "",
+        avatar_url: authUser.user_metadata?.avatar_url ?? "",
+        default_record_type: userData.default_record_type ?? 1,
+      })
+    }
+
+    setIsLoading(false)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, isAuthenticated: !!user, refreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   )

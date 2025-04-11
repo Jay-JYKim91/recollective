@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react"
-import { logOut } from "../lib/auth"
+import { logOut, updateDefaultRecordType } from "../lib/auth"
 import { useNavigate } from "react-router-dom"
 import Toast from "../components/ui/Toast"
 import { useAuth } from "../hooks/useAuth"
+import { RECORD_TYPES } from "../constants/record_types"
 
 export default function Setting() {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   const [toastMsg, setToastMsg] = useState<string>("")
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [selectedDefaultRecordType, setSelectedDefaultRecordType] = useState(
+    user?.default_record_type || "1"
+  )
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "cupcake"
@@ -36,6 +40,17 @@ export default function Setting() {
     document.documentElement.setAttribute("data-theme", newTheme)
   }
 
+  const handleDefaultRecordTypeChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSelectedDefaultRecordType(Number(e.target.value))
+    updateDefaultRecordType({
+      record_type: Number(e.target.value),
+      user_id: user?.user_id || "",
+    })
+    refreshUser()
+  }
+
   return (
     <div>
       <h1 className="font-heading font-bold text-center text-xl mb-4">
@@ -54,7 +69,30 @@ export default function Setting() {
         <div className="card shadow-md bg-base-100 mb-8">
           <div className="card-body">
             <h2 className="card-title">Preferences</h2>
-            {/* <p>Default Record Type</p> */}
+
+            <div className="form-control">
+              <label>
+                <span>Default Record Type</span>
+              </label>
+              <div className="flex gap-4">
+                {RECORD_TYPES.map(({ id, name }) => (
+                  <label
+                    key={id}
+                    className="cursor-pointer flex items-center gap-2"
+                  >
+                    <input
+                      type="radio"
+                      name="defaultRecordType"
+                      value={id}
+                      checked={selectedDefaultRecordType === id}
+                      onChange={handleDefaultRecordTypeChange}
+                      // className="radio"
+                    />
+                    <span className="capitalize">{name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
             <label className="flex items-center gap-2">
               <input

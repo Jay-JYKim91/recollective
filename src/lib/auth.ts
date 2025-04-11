@@ -65,3 +65,22 @@ export const getAndSaveUser = async () => {
     return null
   }
 }
+
+export const updateDefaultRecordType = async ({
+  record_type,
+  user_id,
+}: {
+  record_type: number
+  user_id: string
+}) => {
+  const { error } = await supabase
+    .from("users")
+    .update({ default_record_type: record_type })
+    .eq("id", user_id)
+
+  if (error) {
+    console.error("Failed to update default record type:", error)
+  } else {
+    console.log("✅ Default record type updated!")
+  }
+}

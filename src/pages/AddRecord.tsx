@@ -22,6 +22,8 @@ export default function AddRecord() {
   const { addRecord } = useRecords()
   const { user } = useAuth()
 
+  INITIAL_VALUES.type = `${user?.default_record_type}` || "1"
+
   const handleSave = ({
     input,
     selectedGenres,
