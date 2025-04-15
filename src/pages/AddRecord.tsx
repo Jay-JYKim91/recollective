@@ -31,6 +31,7 @@ export default function AddRecord() {
     input: RecordFormInputType
     selectedGenres: number[]
   }) => {
+    console.log(">>> handle Save", user)
     if (!user) return
 
     let details
@@ -78,7 +79,7 @@ export default function AddRecord() {
     <div className="max-w-3xl mx-auto mt-10 px-4">
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
-          <div className="card-actions justify-between">
+          <div className="card-actions justify-between mb-4">
             <button
               className="btn btn-primary btn-sm"
               onClick={() => navigate("/records", { replace: true })}

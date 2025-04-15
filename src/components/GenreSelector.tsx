@@ -29,7 +29,7 @@ export default function GenreSelector({
   return (
     <div>
       <label className="block mb-2 font-semibold">Genres</label>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-4">
         {filtered_genre.map((genre) => (
           <button
             type="button"

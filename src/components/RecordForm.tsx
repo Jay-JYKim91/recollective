@@ -3,6 +3,7 @@ import { RECORD_TYPES } from "../constants/record_types"
 import { getRecordTypeName } from "../utils/common"
 import GenreSelector from "./GenreSelector"
 import { RecordFormInputType } from "../types/types"
+import StarRatingForm from "./ui/StarRatingForm"
 
 type RecordFormProps = {
   initialValues: RecordFormInputType
@@ -127,23 +128,14 @@ export default function RecordForm({
             record_type={input.type}
           />
 
-          <label className="block mb-2 font-semibold">Rating:</label>
-          <input
-            type="number"
-            value={input.rating}
-            onChange={(e) =>
-              setInput((prev) => ({
-                ...prev,
-                rating: Number(e.target.value),
-              }))
-            }
-            min="0"
-            max="5"
-            className="input input-bordered w-full mb-4"
-            placeholder="Rate between 0 to 5"
+          <StarRatingForm
+            rating={input.rating}
+            setRating={(value: number) => {
+              setInput((prev) => ({ ...prev, rating: value }))
+            }}
           />
 
-          <label className="block mb-2 font-semibold">Date:</label>
+          <label className="block mb-2 font-semibold">Date</label>
           <input
             type="date"
             value={input.date}
@@ -156,7 +148,7 @@ export default function RecordForm({
 
           {input.type === "1" && (
             <div className="mb-4">
-              <label className="block mb-2 font-semibold">Pages:</label>
+              <label className="block mb-2 font-semibold">Pages</label>
               <input
                 type="number"
                 value={input.pages}
@@ -175,7 +167,7 @@ export default function RecordForm({
           {(input.type === "2" || input.type === "3") && (
             <div className="mb-4">
               <label className="block mb-2 font-semibold">
-                Running Time (minutes):
+                Running Time (minutes)
               </label>
               <input
                 type="number"
@@ -195,7 +187,7 @@ export default function RecordForm({
           {input.type === "2" && (
             <div className="mb-4">
               <label className="block mb-2 font-semibold">
-                Number of Episodes:
+                Number of Episodes
               </label>
               <input
                 type="number"
@@ -212,7 +204,7 @@ export default function RecordForm({
             </div>
           )}
 
-          <label className="block mb-2 font-semibold">Notes:</label>
+          <label className="block mb-2 font-semibold">Notes</label>
           <textarea
             value={input.notes}
             onChange={(e) =>

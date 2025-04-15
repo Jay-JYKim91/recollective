@@ -46,7 +46,7 @@ export default function RecordDetail() {
       {showToast && <Toast toastMessage={toastMessage} />}
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
-          <div className="card-actions justify-between">
+          <div className="card-actions justify-between mb-4">
             <button
               className="btn btn-primary btn-sm"
               onClick={() => navigate("/records", { replace: true })}
@@ -78,7 +78,7 @@ export default function RecordDetail() {
               return (
                 <div
                   key={genre.genre_id}
-                  className="px-2 py-1 rounded-lg border bg-primary-blue text-white border-primary-blue mr-2 text-sm"
+                  className="px-2 py-1 rounded-lg bg-secondary text-white border-primary mr-2 text-sm"
                 >
                   {getGenreName(genre.genre_id)}
                 </div>
