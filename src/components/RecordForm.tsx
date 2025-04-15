@@ -58,25 +58,28 @@ export default function RecordForm({
         e.preventDefault()
         onSubmit({ input, selectedGenres })
       }}
+      className="flex flex-col gap-4"
     >
-      <label className="block mb-2 font-semibold">Select Type:</label>
-      <div className="flex flex-wrap gap-4 mb-4">
-        {RECORD_TYPES.map((option) => (
-          <label
-            key={option.id}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <input
-              type="radio"
-              name="recordType"
-              value={option.id}
-              checked={Number(input.type) === option.id}
-              onChange={handleTypeChange}
-              className="radio radio-primary"
-            />
-            <span className="capitalize">{option.name}</span>
-          </label>
-        ))}
+      <div>
+        <label className="block mb-2 font-semibold">Select Type</label>
+        <div className="flex flex-wrap gap-4">
+          {RECORD_TYPES.map((option) => (
+            <label
+              key={option.id}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="recordType"
+                value={option.id}
+                checked={Number(input.type) === option.id}
+                onChange={handleTypeChange}
+                className="radio radio-primary"
+              />
+              <span className="capitalize">{option.name}</span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {input.type !== "" && (
@@ -88,39 +91,43 @@ export default function RecordForm({
               setIsReadySearch={setIsReadySearch}
               handleTitleInput={handleTitleInput}
             /> */}
-          <label className="block mb-2 font-semibold">Title</label>
-          <input
-            type="text"
-            value={input.title}
-            onChange={(e) =>
-              setInput((prev) => ({
-                ...prev,
-                title: e.target.value,
-              }))
-            }
-            placeholder={`Enter the title of the ${getRecordTypeName(
-              Number(input.type)
-            )}`}
-            className="input input-bordered w-full mb-4"
-          />
+          <div className="flex items-center justify-between gap-8">
+            <label className="block font-semibold w-60">Title</label>
+            <input
+              type="text"
+              value={input.title}
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+              placeholder={`Enter the title of the ${getRecordTypeName(
+                Number(input.type)
+              )}`}
+              className="input w-full"
+            />
+          </div>
 
-          <label className="block mb-2 font-semibold">
-            {input.type === "1" ? "Writer:" : "Director"}
-          </label>
-          <input
-            type="text"
-            value={input.creator}
-            onChange={(e) =>
-              setInput((prev) => ({
-                ...prev,
-                creator: e.target.value,
-              }))
-            }
-            placeholder={`Enter the ${
-              input.type === "1" ? "writer" : "director"
-            }'s name`}
-            className="input input-bordered w-full mb-4"
-          />
+          <div className="flex items-center justify-between gap-8">
+            <label className="block font-semibold w-60">
+              {input.type === "1" ? "Writer:" : "Director"}
+            </label>
+            <input
+              type="text"
+              value={input.creator}
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  creator: e.target.value,
+                }))
+              }
+              placeholder={`Enter the ${
+                input.type === "1" ? "writer" : "director"
+              }'s name`}
+              className="input w-full"
+            />
+          </div>
 
           <GenreSelector
             selectedGenres={selectedGenres}
@@ -135,20 +142,22 @@ export default function RecordForm({
             }}
           />
 
-          <label className="block mb-2 font-semibold">Date</label>
-          <input
-            type="date"
-            value={input.date}
-            onChange={(e) =>
-              setInput((prev) => ({ ...prev, date: e.target.value }))
-            }
-            className="input input-bordered w-full mb-4"
-            max={new Date().toISOString().split("T")[0]}
-          />
+          <div className="flex items-center justify-between gap-8">
+            <label className="block font-semibold w-60">Date</label>
+            <input
+              type="date"
+              value={input.date}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, date: e.target.value }))
+              }
+              className="input w-full "
+              max={new Date().toISOString().split("T")[0]}
+            />
+          </div>
 
           {input.type === "1" && (
-            <div className="mb-4">
-              <label className="block mb-2 font-semibold">Pages</label>
+            <div className="flex items-center justify-between gap-8">
+              <label className="block font-semibold w-60">Pages</label>
               <input
                 type="number"
                 value={input.pages}
@@ -158,15 +167,15 @@ export default function RecordForm({
                     pages: Number(e.target.value),
                   }))
                 }
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="Enter the total number of pages"
               />
             </div>
           )}
 
           {(input.type === "2" || input.type === "3") && (
-            <div className="mb-4">
-              <label className="block mb-2 font-semibold">
+            <div className="flex items-center justify-between gap-8">
+              <label className="block font-semibold w-60">
                 Running Time (minutes)
               </label>
               <input
@@ -178,15 +187,15 @@ export default function RecordForm({
                     running_time: Number(e.target.value),
                   }))
                 }
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="Enter duration in minutes"
               />
             </div>
           )}
 
           {input.type === "2" && (
-            <div className="mb-4">
-              <label className="block mb-2 font-semibold">
+            <div className="flex items-center justify-between gap-8">
+              <label className="block font-semibold w-60">
                 Number of Episodes
               </label>
               <input
@@ -198,21 +207,22 @@ export default function RecordForm({
                     episodes: Number(e.target.value),
                   }))
                 }
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="Enter the total number of episodes"
               />
             </div>
           )}
-
-          <label className="block mb-2 font-semibold">Notes</label>
-          <textarea
-            value={input.notes}
-            onChange={(e) =>
-              setInput((prev) => ({ ...prev, notes: e.target.value }))
-            }
-            className="textarea textarea-bordered w-full mb-4"
-            placeholder="Add any notes..."
-          ></textarea>
+          <div className="flex flex-col gap-2">
+            <label className="block font-semibold">Notes</label>
+            <textarea
+              value={input.notes}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, notes: e.target.value }))
+              }
+              className="textarea textarea-bordered w-full mb-4"
+              placeholder="Add any notes..."
+            ></textarea>
+          </div>
         </>
       )}
 

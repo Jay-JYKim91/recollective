@@ -110,7 +110,7 @@ export default function RecordDetail() {
           </div>
 
           {record.notes !== "" && (
-            <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-line">
+            <div className="text-lg leading-relaxed whitespace-pre-line">
               {record.notes}
             </div>
           )}

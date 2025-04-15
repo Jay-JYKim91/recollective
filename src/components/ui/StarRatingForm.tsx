@@ -22,9 +22,9 @@ export default function StarRatingForm({
   const displayRating = hoverRating ?? rating
 
   return (
-    <div className="flex justify-between">
-      <label className="block mb-2 font-semibold">Rating</label>
-      <div className="flex gap-1 mb-4">
+    <div className="flex gap-8">
+      <label className="block font-semibold w-60">Rating</label>
+      <div className="flex gap-1 w-full">
         {Array.from({ length: 5 }, (_, i) => {
           let icon
           if (displayRating >= i + 1) {

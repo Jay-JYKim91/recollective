@@ -27,15 +27,15 @@ export default function GenreSelector({
   )
 
   return (
-    <div>
-      <label className="block mb-2 font-semibold">Genres</label>
-      <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex flex-col gap-2">
+      <label className="block font-semibold">Genres</label>
+      <div className="flex flex-wrap gap-2">
         {filtered_genre.map((genre) => (
           <button
             type="button"
             key={genre.id}
             onClick={() => toggleGenre(genre.id)}
-            className={`px-4 py-2 rounded-lg border ${
+            className={`px-2 py-1 rounded-lg border ${
               selectedGenres.includes(genre.id)
                 ? "bg-blue-500 text-white border-blue-500" // ✅ 선택된 스타일
                 : "bg-gray-200 text-gray-700 border-gray-300" // ❌ 기본 스타일
