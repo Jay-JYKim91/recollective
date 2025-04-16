@@ -37,8 +37,8 @@ export default function GenreSelector({
             onClick={() => toggleGenre(genre.id)}
             className={`px-2 py-1 rounded-lg border ${
               selectedGenres.includes(genre.id)
-                ? "bg-blue-500 text-white border-blue-500" // ✅ 선택된 스타일
-                : "bg-gray-200 text-gray-700 border-gray-300" // ❌ 기본 스타일
+                ? "bg-teal-500 text-white border-teal-600"
+                : "bg-gray-200 text-gray-700 border-gray-300"
             }`}
           >
             {genre.name}
