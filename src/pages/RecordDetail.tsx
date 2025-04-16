@@ -8,6 +8,7 @@ import { useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
 import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
+import { BsFillTvFill } from "react-icons/bs"
 
 export default function RecordDetail() {
   const { id } = useParams()
@@ -97,6 +98,15 @@ export default function RecordDetail() {
                 <FaClock />
                 <span className="font-medium">
                   {getTimeText(details.running_time)}
+                </span>
+              </div>
+            )}
+
+            {details?.episode_count && (
+              <div className="flex items-center gap-2">
+                <BsFillTvFill />
+                <span className="font-medium">
+                  {details?.episode_count} episodes
                 </span>
               </div>
             )}
