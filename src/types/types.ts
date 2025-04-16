@@ -21,3 +21,16 @@ export type RecordFormInputType = {
   running_time?: number
   episodes?: number
 }
+
+export type FetchedRecordType = {
+  created_at: string
+  creator: string
+  date: string
+  details: string
+  id: string
+  notes: string
+  rating: number
+  title: string
+  type_id: number
+  user_id: string
+}

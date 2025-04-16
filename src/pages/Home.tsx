@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { getAndSaveUser } from "../lib/auth"
 import { useAuth } from "../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import { useRecords } from "../hooks/useRecords"
-import RecordIcon from "../components/ui/RecordIcon"
-import StarRating from "../components/ui/StarRating"
 import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
+import { FcStatistics } from "react-icons/fc"
+import { FaRegClock, FaRegStar } from "react-icons/fa"
+import { getTimeText } from "../utils/common"
+import { IoMdBook } from "react-icons/io"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -41,38 +43,81 @@ export default function Home() {
     }
   }, [])
 
+  const totalPages = useMemo((): number => {
+    const books = records?.filter((record) => record.type_id === 1)
+
+    if (!books || books.length === 0) return 0
+
+    return books.reduce((sum, book) => {
+      const details = JSON.parse(book.details)
+      return sum + details?.pages
+    }, 0)
+  }, [records])
+
+  const avgRating = useMemo(() => {
+    const rated = records?.filter((r) => r.rating > 0) || []
+
+    if (rated.length === 0) return 0
+
+    const sum = rated.reduce((sum, r) => sum + r.rating, 0)
+    return sum / rated.length
+  }, [records])
+
+  const watchTime = useMemo((): number => {
+    let totalMinutes: number = 0
+    const dramas = records?.filter((record) => record.type_id === 2)
+    const movies = records?.filter((record) => record.type_id === 3)
+
+    if (dramas && dramas?.length > 0) {
+      totalMinutes += dramas.reduce((sum, drama) => {
+        const details = JSON.parse(drama.details)
+        const time = details?.running_time * (details?.episode_count ?? 1)
+        return sum + (time || 0)
+      }, 0)
+    }
+
+    if (movies && movies?.length > 0) {
+      totalMinutes += movies.reduce((sum, movie) => {
+        const details = JSON.parse(movie.details)
+        const time = details?.running_time
+        return sum + (time || 0)
+      }, 0)
+    }
+
+    return totalMinutes
+  }, [records])
+
   return (
     <div>
-      <h1 className="text-center">Hi, {user?.name}</h1>
       {isLoading ? (
         <LoadingCircle />
       ) : records && records.length > 0 ? (
-        <ul className="divide-y divide-gray-200">
-          {records?.map((record) => {
-            return (
-              <li
-                key={record.id}
-                className="flex justify-between items-center py-3 px-4 hover:bg-gray-50 cursor-pointer"
-                onClick={() => navigate(`/records/${record.id}`)}
-              >
-                <div className="flex flex-col">
-                  <div className="flex items-center">
-                    <span className="mr-2">
-                      <RecordIcon typeId={record.type_id} />
-                    </span>
-                    <span className="font-semibold text-lg">
-                      {record.title}
-                    </span>
-                  </div>
-                  <span className="text-sm text-gray-500">{record.date}</span>
-                </div>
-                <div className="text-sm text-gray-700">
-                  <StarRating rating={record.rating} />
-                </div>
-              </li>
-            )
-          })}
-        </ul>
+        <div className="max-w-3xl mx-auto mt-10 px-4">
+          <h1 className="text-center mb-4">Hi, {user?.name}</h1>
+          <div className="card shadow-xl bg-base-100 border border-gray-200">
+            <div className="card-body">
+              {/* <div className="card-actions justify-between mb-4"></div> */}
+              <h2 className="card-title text-xl font-body">
+                <FcStatistics />
+                Statistics Summary
+              </h2>
+              <ul className="text-lg">
+                <li className="flex items-center gap-2">
+                  <FaRegClock />
+                  <span>Watch Time: {getTimeText(watchTime)}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <IoMdBook />
+                  <span>Pages Read: {totalPages} pages</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <FaRegStar />
+                  <span>Avg Rating: {avgRating}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       ) : (
         <>
           <p className="font-body text-center text-lg">

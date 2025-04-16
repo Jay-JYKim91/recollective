@@ -1,11 +1,18 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query"
 import { supabase } from "../lib/supabase"
-import { RecordType } from "../types/types"
+import { FetchedRecordType, RecordType } from "../types/types"
 
 export const useRecords = () => {
   const queryClient = useQueryClient()
 
-  const useUserRecords = (userId: string) =>
+  const useUserRecords = (
+    userId: string
+  ): UseQueryResult<FetchedRecordType[]> =>
     useQuery({
       queryKey: ["records", userId],
       queryFn: async () => {
