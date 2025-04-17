@@ -10,6 +10,8 @@ import { FcStatistics } from "react-icons/fc"
 import { FaRegClock, FaRegStar } from "react-icons/fa"
 import { getTimeText } from "../utils/common"
 import { IoMdBook } from "react-icons/io"
+import { BsFiles } from "react-icons/bs"
+import RecordTypeDoughnutChart from "../components/ui/RecordTypeDoughnutChart"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -92,9 +94,9 @@ export default function Home() {
       {isLoading ? (
         <LoadingCircle />
       ) : records && records.length > 0 ? (
-        <div className="max-w-3xl mx-auto mt-10 px-4">
+        <div className="max-w-3xl mx-auto mt-10 md:px-4">
           <h1 className="text-center mb-4">Hi, {user?.name}</h1>
-          <div className="card shadow-xl bg-base-100 border border-gray-200">
+          <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
             <div className="card-body">
               {/* <div className="card-actions justify-between mb-4"></div> */}
               <h2 className="card-title text-xl font-body">
@@ -114,7 +116,20 @@ export default function Home() {
                   <FaRegStar />
                   <span>Avg Rating: {avgRating}</span>
                 </li>
+                <li className="flex items-center gap-2">
+                  <BsFiles />
+                  <span>Total Records: {records.length}</span>
+                </li>
               </ul>
+            </div>
+          </div>
+          <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
+            <div className="card-body">
+              <h2 className="card-title text-xl font-body">
+                <FcStatistics />
+                Record Type Breakdown
+              </h2>
+              <RecordTypeDoughnutChart records={records} />
             </div>
           </div>
         </div>
