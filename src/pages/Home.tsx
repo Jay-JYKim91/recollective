@@ -12,6 +12,7 @@ import { getTimeText } from "../utils/common"
 import { IoMdBook } from "react-icons/io"
 import { BsFiles } from "react-icons/bs"
 import RecordTypeDoughnutChart from "../components/ui/RecordTypeDoughnutChart"
+import RecordGenreRadarChart from "../components/ui/RecordGenreRadarChart"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -130,6 +131,15 @@ export default function Home() {
                 Record Type Breakdown
               </h2>
               <RecordTypeDoughnutChart records={records} />
+            </div>
+          </div>
+          <div className="card shadow-xl bg-base-100 border border-gray-200">
+            <div className="card-body">
+              <h2 className="card-title text-xl font-body">
+                <FcStatistics />
+                Your Genre Preferences
+              </h2>
+              <RecordGenreRadarChart userId={user?.user_id || ""} />
             </div>
           </div>
         </div>
