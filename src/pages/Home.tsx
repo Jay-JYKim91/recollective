@@ -95,19 +95,21 @@ export default function Home() {
       {isLoading ? (
         <LoadingCircle />
       ) : records && records.length > 0 ? (
-        <div className="max-w-3xl mx-auto mt-10 md:px-4">
+        <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
           <h1 className="text-center mb-4">Hi, {user?.name}</h1>
           <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
             <div className="card-body">
-              {/* <div className="card-actions justify-between mb-4"></div> */}
               <h2 className="card-title text-xl font-body">
                 <FcStatistics />
                 Statistics Summary
               </h2>
               <ul className="text-lg">
-                <li className="flex items-center gap-2">
-                  <FaRegClock />
-                  <span>Watch Time: {getTimeText(watchTime)}</span>
+                <li className="flex flex-col md:flex-row items-start md:items-center">
+                  <div className="flex items-center gap-2">
+                    <FaRegClock />
+                    <span>Watch Time:</span>
+                  </div>
+                  <span className="mx-6 md:ml-1">{getTimeText(watchTime)}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <IoMdBook />

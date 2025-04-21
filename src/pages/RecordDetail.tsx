@@ -37,13 +37,17 @@ export default function RecordDetail() {
     navigate(`/records/${id}/edit`)
   }
 
+  const dateString = record
+    ? new Date(record.date).toLocaleDateString().replace(/\.$/, "")
+    : ""
+
   if (isLoading) return <LoadingCircle />
 
   if (!id || !record)
     return <p>Oops! Something went wrong. Please try again.</p>
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 px-4">
+    <div className="max-w-3xl mx-auto mt-10 md:px-4">
       {showToast && <Toast toastMessage={toastMessage} />}
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
@@ -66,7 +70,7 @@ export default function RecordDetail() {
               </label>
             </div>
           </div>
-          <h2 className="card-title text-3xl font-body">
+          <h2 className="card-title text-2xl md:text-3xl font-body">
             <RecordIcon typeId={record.type_id} /> {record.title}
           </h2>
           {record.creator && (
@@ -87,10 +91,10 @@ export default function RecordDetail() {
             })}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             {record.rating && <StarRating rating={record.rating} />}
             <div className="flex items-center gap-2">
-              <FaCalendar /> {new Date(record.date).toLocaleDateString()}
+              <FaCalendar /> {dateString}
             </div>
 
             {details?.running_time && (

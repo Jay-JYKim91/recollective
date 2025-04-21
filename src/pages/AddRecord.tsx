@@ -76,21 +76,29 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 px-4">
+    <div className="max-w-3xl mx-auto mt-10 md:px-4">
+      <div className="flex justify-between mb-4">
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => navigate("/records", { replace: true })}
+        >
+          ← Back
+        </button>
+      </div>
+      <h1 className="font-heading font-bold text-center text-xl mb-4">
+        Add New Record
+      </h1>
       <div className="card shadow-xl bg-base-100">
         <div className="card-body">
-          <div className="card-actions justify-between mb-4">
+          {/* <div className="card-actions justify-between mb-4">
             <button
               className="btn btn-primary btn-sm"
               onClick={() => navigate("/records", { replace: true })}
             >
               ← Back
             </button>
-          </div>
+          </div> */}
 
-          <h1 className="font-heading font-bold text-center text-xl">
-            Add New Record
-          </h1>
           <RecordForm
             initialValues={INITIAL_VALUES}
             onSubmit={handleSave}

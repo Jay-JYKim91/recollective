@@ -17,7 +17,7 @@ export default function Records() {
   const toastMessage = usePageToast(setShowToast)
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
       {showToast && <Toast toastMessage={toastMessage} />}
       <h1 className="font-heading font-bold text-center text-xl mb-4">
         Your Records
@@ -40,7 +40,7 @@ export default function Records() {
               return (
                 <li
                   key={record.id}
-                  className="flex justify-between items-center py-3 px-4 hover:bg-gray-50 cursor-pointer"
+                  className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 cursor-pointer"
                   onClick={() => navigate(`/records/${record.id}`)}
                 >
                   <div className="flex flex-col">
@@ -48,7 +48,8 @@ export default function Records() {
                       <span className="mr-2">
                         <RecordIcon typeId={record.type_id} />
                       </span>
-                      <span className="font-semibold text-lg">
+                      {/* <span className="font-semibold text-lg"> */}
+                      <span className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs">
                         {record.title}
                       </span>
                     </div>
