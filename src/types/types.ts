@@ -1,3 +1,5 @@
+import { RECORD_TYPES } from "../constants/record_types"
+
 export type RecordType = {
   user_id: string
   title: string
@@ -34,3 +36,5 @@ export type FetchedRecordType = {
   type_id: number
   user_id: string
 }
+
+export type RecordTypeName = (typeof RECORD_TYPES)[number]["name"]

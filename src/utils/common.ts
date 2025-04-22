@@ -1,7 +1,8 @@
 import { GENRES } from "../constants/genres"
 import { RECORD_TYPES } from "../constants/record_types"
+import { RecordTypeName } from "../types/types"
 
-export const getRecordTypeName = (type_id: number): string => {
+export const getRecordTypeName = (type_id: number): RecordTypeName | "" => {
   return RECORD_TYPES.find((type) => type.id === type_id)?.name || ""
 }
 

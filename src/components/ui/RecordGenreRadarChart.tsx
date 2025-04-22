@@ -77,7 +77,7 @@ export default function RecordGenreRadarChart({
     },
   }
   return (
-    <div className="flex justify-center mx-28">
+    <div className="flex justify-center md:mx-28">
       <Radar data={chartData} options={options} />
     </div>
   )

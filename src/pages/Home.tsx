@@ -7,12 +7,13 @@ import { useRecords } from "../hooks/useRecords"
 import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
 import { FcStatistics } from "react-icons/fc"
-import { FaRegClock, FaRegStar } from "react-icons/fa"
-import { getTimeText } from "../utils/common"
+import { FaRegClock, FaRegStar, FaStar } from "react-icons/fa"
+import { getRecordTypeEmoji, getTimeText } from "../utils/common"
 import { IoMdBook } from "react-icons/io"
 import { BsFiles } from "react-icons/bs"
 import RecordTypeDoughnutChart from "../components/ui/RecordTypeDoughnutChart"
 import RecordGenreRadarChart from "../components/ui/RecordGenreRadarChart"
+import { FetchedRecordType } from "../types/types"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -90,6 +91,24 @@ export default function Home() {
     return totalMinutes
   }, [records])
 
+  const topRatedByType = useMemo(() => {
+    if (!records) return
+
+    const topBook = records
+      .filter((r) => r.type_id === 1)
+      .sort((a, b) => b.rating - a.rating)[0]
+
+    const topDrama = records
+      .filter((r) => r.type_id === 2)
+      .sort((a, b) => b.rating - a.rating)[0]
+
+    const topMovie = records
+      .filter((r) => r.type_id === 3)
+      .sort((a, b) => b.rating - a.rating)[0]
+
+    return { topBook, topDrama, topMovie }
+  }, [records])
+
   return (
     <div>
       {isLoading ? (
@@ -129,13 +148,59 @@ export default function Home() {
           <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
             <div className="card-body">
               <h2 className="card-title text-xl font-body">
+                <FaStar className="text-yellow-300" />
+                Top Rated Content by Type
+              </h2>
+              <div className="flex">
+                {topRatedByType?.topBook && (
+                  <div className="flex-1">
+                    <h3 className="text-base">
+                      {getRecordTypeEmoji(1)} Best Book
+                    </h3>
+                    <span className="font-bold">
+                      {topRatedByType.topBook.title}{" "}
+                    </span>
+                    <span>by {topRatedByType.topBook.creator}</span>
+                  </div>
+                )}
+                {topRatedByType?.topMovie && (
+                  <div className="flex-1">
+                    <h3 className="text-base">
+                      {getRecordTypeEmoji(2)} Best Movie
+                    </h3>
+                    <span className="font-bold">
+                      {topRatedByType.topMovie.title}{" "}
+                    </span>
+                    <span>by {topRatedByType.topMovie.creator}</span>
+                    <p>
+                      <i>"{topRatedByType.topMovie.notes}"</i>
+                    </p>
+                  </div>
+                )}
+                {topRatedByType?.topDrama && (
+                  <div className="flex-1">
+                    <h3 className="text-lg">
+                      {getRecordTypeEmoji(3)} Best Drama
+                    </h3>
+                    <span className="font-bold">
+                      {topRatedByType.topDrama.title}{" "}
+                    </span>
+                    <span>by {topRatedByType.topDrama.creator}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
+            <div className="card-body">
+              <h2 className="card-title text-xl font-body">
                 <FcStatistics />
                 Record Type Breakdown
               </h2>
               <RecordTypeDoughnutChart records={records} />
             </div>
           </div>
-          <div className="card shadow-xl bg-base-100 border border-gray-200">
+          <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
             <div className="card-body">
               <h2 className="card-title text-xl font-body">
                 <FcStatistics />
