@@ -52,11 +52,11 @@ export default function Setting() {
   }
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
       <h1 className="font-heading font-bold text-center text-xl mb-4">
         Settings
       </h1>
-      <div className="max-w-3xl mx-auto mt-10 px-4">
+      <div>
         <div className="card shadow-md bg-base-100 mb-8">
           <div className="card-body">
             <h2 className="card-title">Profile</h2>

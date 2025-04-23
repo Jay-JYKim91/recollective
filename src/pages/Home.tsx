@@ -115,7 +115,7 @@ export default function Home() {
         <LoadingCircle />
       ) : records && records.length > 0 ? (
         <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
-          <h1 className="text-center mb-4">Hi, {user?.name}</h1>
+          {/* <h1 className="text-center mb-4">Hi, {user?.name}</h1> */}
           <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
             <div className="card-body">
               <h2 className="card-title text-xl font-body">
@@ -132,11 +132,11 @@ export default function Home() {
                 </li>
                 <li className="flex items-center gap-2">
                   <IoMdBook />
-                  <span>Pages Read: {totalPages} pages</span>
+                  <span>Pages Read: {totalPages.toLocaleString()} pages</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <FaRegStar />
-                  <span>Avg Rating: {avgRating}</span>
+                  <span>Avg Rating: {avgRating.toFixed(1)}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <BsFiles />
