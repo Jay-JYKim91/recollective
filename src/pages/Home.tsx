@@ -13,7 +13,7 @@ import { IoMdBook } from "react-icons/io"
 import { BsFiles } from "react-icons/bs"
 import RecordTypeDoughnutChart from "../components/ui/RecordTypeDoughnutChart"
 import RecordGenreRadarChart from "../components/ui/RecordGenreRadarChart"
-import { FetchedRecordType } from "../types/types"
+import RecordActivityBarChart from "../components/ui/RecordActivityBarChart"
 
 export default function Home() {
   const [toastMsg, setToastMsg] = useState<string>("")
@@ -149,7 +149,7 @@ export default function Home() {
             <div className="card-body">
               <h2 className="card-title text-xl font-body">
                 <FaStar className="text-yellow-300" />
-                Top Rated Content by Type
+                Top Rated Record by Type
               </h2>
               <div className="flex">
                 {topRatedByType?.topBook && (
@@ -207,6 +207,15 @@ export default function Home() {
                 Your Genre Preferences
               </h2>
               <RecordGenreRadarChart userId={user?.user_id || ""} />
+            </div>
+          </div>
+          <div className="card shadow-xl bg-base-100 border border-gray-200 mb-4">
+            <div className="card-body">
+              <h2 className="card-title text-xl font-body">
+                <FcStatistics />
+                Monthly Activity
+              </h2>
+              <RecordActivityBarChart records={records} />
             </div>
           </div>
         </div>
