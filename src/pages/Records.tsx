@@ -3,10 +3,18 @@ import { useRecords } from "../hooks/useRecords"
 import { useAuth } from "../hooks/useAuth"
 import RecordIcon from "../components/ui/RecordIcon"
 import StarRating from "../components/ui/StarRating"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
 import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
+import { RECORD_TYPES } from "../constants/record_types"
+import { capitalize } from "../utils/common"
+
+type FilterType = {
+  year: string
+  record_type: string
+  rating: string
+}
 
 export default function Records() {
   const navigate = useNavigate()
@@ -15,6 +23,35 @@ export default function Records() {
   const { data: records, isLoading } = useUserRecords(user?.user_id || "")
   const [showToast, setShowToast] = useState(false)
   const toastMessage = usePageToast(setShowToast)
+  const [filters, setFilters] = useState<FilterType>({
+    year: "",
+    record_type: "",
+    rating: "",
+  })
+
+  const yearOptions = useMemo(() => {
+    const yearSet = new Set<number>()
+
+    records?.forEach((record) => {
+      const year = new Date(record.date).getFullYear()
+      yearSet.add(year)
+    })
+
+    return Array.from(yearSet).sort((a, b) => b - a)
+  }, [records])
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters((prev) => ({ ...prev, year: e.target.value }))
+  }
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters((prev) => ({ ...prev, record_type: e.target.value }))
+  }
+  const handleRatingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters((prev) => ({ ...prev, rating: e.target.value }))
+  }
+  const handleFilterReset = () => {
+    setFilters(() => ({ year: "", record_type: "", rating: "" }))
+  }
 
   return (
     <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
@@ -33,6 +70,50 @@ export default function Records() {
               onClick={() => navigate("/records/new")}
             >
               + Add New Record
+            </button>
+          </div>
+          {/* Filters */}
+          <div className="flex flex-wrap gap-4 mb-6 items-center">
+            <select
+              className="flex-1 select select-bordered"
+              onChange={handleYearChange}
+              value={filters.year}
+            >
+              <option value="">All Years</option>
+              {yearOptions.map((year) => (
+                <option value={year} key={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+            <select
+              className="flex-1 select select-bordered"
+              onChange={handleTypeChange}
+              value={filters.record_type}
+            >
+              <option value="">All Types</option>
+              {RECORD_TYPES.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {capitalize(type.name)}
+                </option>
+              ))}
+            </select>
+            <select
+              className="flex-1 select select-bordered"
+              onChange={handleRatingChange}
+              value={filters.rating}
+            >
+              <option value="">All Ratings</option>
+              <option value="5">Only ★★★★★</option>
+              <option value="4">4+ Stars</option>
+              <option value="3">3+ Stars</option>
+            </select>
+            <button
+              type="button"
+              className="btn btn-warning"
+              onClick={handleFilterReset}
+            >
+              Reset
             </button>
           </div>
           <ul className="divide-y divide-gray-200">

@@ -31,3 +31,6 @@ export const getTimeText = (running_time: number): string => {
   }
   return result
 }
+
+export const capitalize = (word: string) =>
+  word.charAt(0).toUpperCase() + word.slice(1)
