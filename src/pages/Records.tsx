@@ -40,18 +40,32 @@ export default function Records() {
     return Array.from(yearSet).sort((a, b) => b - a)
   }, [records])
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilters((prev) => ({ ...prev, year: e.target.value }))
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
-  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilters((prev) => ({ ...prev, record_type: e.target.value }))
-  }
-  const handleRatingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilters((prev) => ({ ...prev, rating: e.target.value }))
-  }
+
   const handleFilterReset = () => {
     setFilters(() => ({ year: "", record_type: "", rating: "" }))
   }
+
+  const filteredRecords = useMemo(() => {
+    return records
+      ?.filter((record) =>
+        filters.year
+          ? new Date(record.date).getFullYear() === Number(filters.year)
+          : true
+      )
+      .filter((record) =>
+        filters.record_type
+          ? record.type_id === Number(filters.record_type)
+          : true
+      )
+      .filter((record) =>
+        filters.rating ? record.rating >= Number(filters.rating) : true
+      )
+  }, [records, filters])
+
+  const isFiltering = filters.rating || filters.record_type || filters.year
 
   return (
     <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
@@ -62,7 +76,7 @@ export default function Records() {
 
       {isLoading ? (
         <LoadingCircle />
-      ) : records && records.length > 0 ? (
+      ) : (
         <>
           <div className="flex justify-end mb-4">
             <button
@@ -72,91 +86,97 @@ export default function Records() {
               + Add New Record
             </button>
           </div>
-          {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-6 items-center">
-            <select
-              className="flex-1 select select-bordered"
-              onChange={handleYearChange}
-              value={filters.year}
-            >
-              <option value="">All Years</option>
-              {yearOptions.map((year) => (
-                <option value={year} key={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-            <select
-              className="flex-1 select select-bordered"
-              onChange={handleTypeChange}
-              value={filters.record_type}
-            >
-              <option value="">All Types</option>
-              {RECORD_TYPES.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {capitalize(type.name)}
-                </option>
-              ))}
-            </select>
-            <select
-              className="flex-1 select select-bordered"
-              onChange={handleRatingChange}
-              value={filters.rating}
-            >
-              <option value="">All Ratings</option>
-              <option value="5">Only ★★★★★</option>
-              <option value="4">4+ Stars</option>
-              <option value="3">3+ Stars</option>
-            </select>
-            <button
-              type="button"
-              className="btn btn-warning"
-              onClick={handleFilterReset}
-            >
-              Reset
-            </button>
-          </div>
-          <ul className="divide-y divide-gray-200">
-            {records?.map((record) => {
-              return (
-                <li
-                  key={record.id}
-                  className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 cursor-pointer"
-                  onClick={() => navigate(`/records/${record.id}`)}
+
+          {!records || records.length === 0 ? (
+            <>
+              <p className="font-body text-center text-lg">
+                You haven't recorded anything yet!
+              </p>
+            </>
+          ) : (
+            <>
+              {/* Filters */}
+              <div className="flex flex-wrap gap-4 mb-6 items-center">
+                <select
+                  className="flex-1 select select-bordered"
+                  onChange={handleFilterChange}
+                  value={filters.year}
+                  name="year"
                 >
-                  <div className="flex flex-col">
-                    <div className="flex items-center">
-                      <span className="mr-2">
-                        <RecordIcon typeId={record.type_id} />
-                      </span>
-                      {/* <span className="font-semibold text-lg"> */}
-                      <span className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs">
-                        {record.title}
-                      </span>
-                    </div>
-                    <span className="text-sm text-gray-500">{record.date}</span>
-                  </div>
-                  <div className="text-sm text-gray-700">
-                    <StarRating rating={record.rating} />
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
-        </>
-      ) : (
-        <>
-          <p className="font-body text-center text-lg">
-            You haven't recorded anything yet!
-          </p>
-          <div className="flex justify-center">
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate("/records/new")}
-            >
-              + Add New Record
-            </button>
-          </div>
+                  <option value="">All Years</option>
+                  {yearOptions.map((year) => (
+                    <option value={year} key={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="flex-1 select select-bordered"
+                  onChange={handleFilterChange}
+                  value={filters.record_type}
+                  name="record_type"
+                >
+                  <option value="">All Types</option>
+                  {RECORD_TYPES.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {capitalize(type.name)}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="flex-1 select select-bordered"
+                  onChange={handleFilterChange}
+                  value={filters.rating}
+                  name="rating"
+                >
+                  <option value="">All Ratings</option>
+                  <option value="5">Only ★★★★★</option>
+                  <option value="4">4+ Stars</option>
+                  <option value="3">3+ Stars</option>
+                </select>
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  onClick={handleFilterReset}
+                >
+                  Reset
+                </button>
+              </div>
+
+              {((isFiltering ? filteredRecords : records) || [])?.length > 0 ? (
+                <ul className="divide-y divide-gray-200">
+                  {(isFiltering ? filteredRecords : records)?.map((record) => (
+                    <li
+                      key={record.id}
+                      className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 cursor-pointer"
+                      onClick={() => navigate(`/records/${record.id}`)}
+                    >
+                      <div className="flex flex-col">
+                        <div className="flex items-center">
+                          <span className="mr-2">
+                            <RecordIcon typeId={record.type_id} />
+                          </span>
+                          <span className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs">
+                            {record.title}
+                          </span>
+                        </div>
+                        <span className="text-sm text-gray-500">
+                          {record.date}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        <StarRating rating={record.rating} />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  No records match your filters.
+                </p>
+              )}
+            </>
+          )}
         </>
       )}
     </div>
