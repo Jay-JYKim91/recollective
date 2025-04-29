@@ -98,7 +98,7 @@ export default function Records() {
               {/* Filters */}
               <div className="flex flex-wrap gap-4 mb-6 items-center">
                 <select
-                  className="flex-1 select select-bordered"
+                  className="w-[47.5%] md:flex-1 select select-bordered"
                   onChange={handleFilterChange}
                   value={filters.year}
                   name="year"
@@ -111,7 +111,7 @@ export default function Records() {
                   ))}
                 </select>
                 <select
-                  className="flex-1 select select-bordered"
+                  className="w-[47.5%] md:flex-1 select select-bordered"
                   onChange={handleFilterChange}
                   value={filters.record_type}
                   name="record_type"
@@ -124,7 +124,7 @@ export default function Records() {
                   ))}
                 </select>
                 <select
-                  className="flex-1 select select-bordered"
+                  className="w-[47.5%] md:flex-1 select select-bordered"
                   onChange={handleFilterChange}
                   value={filters.rating}
                   name="rating"
@@ -136,7 +136,7 @@ export default function Records() {
                 </select>
                 <button
                   type="button"
-                  className="btn btn-warning"
+                  className="w-[47.5%] md:flex-1 btn btn-warning"
                   onClick={handleFilterReset}
                 >
                   Reset

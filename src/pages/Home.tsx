@@ -151,7 +151,7 @@ export default function Home() {
                 <FaStar className="text-yellow-300" />
                 Top Rated Record by Type
               </h2>
-              <div className="flex">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-0">
                 {topRatedByType?.topBook && (
                   <div className="flex-1">
                     <h3 className="text-base">

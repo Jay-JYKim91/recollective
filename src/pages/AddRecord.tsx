@@ -76,7 +76,7 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 md:px-4">
+    <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
       <div className="flex justify-between mb-4">
         <button
           className="btn btn-primary btn-sm"
