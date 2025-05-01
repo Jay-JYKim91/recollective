@@ -7,7 +7,23 @@ export const getRecordTypeName = (type_id: number): RecordTypeName | "" => {
 }
 
 export const getRecordTypeEmoji = (type_id: number): string => {
-  return getRecordTypeName(type_id) === "book" ? "📕" : "🎥"
+  let result = ""
+
+  switch (getRecordTypeName(type_id)) {
+    case "book":
+      result = "📕"
+      break
+    case "drama":
+      result = "📺"
+      break
+    case "movie":
+      result = "🎥"
+      break
+    default:
+      break
+  }
+
+  return result
 }
 
 export const getGenreName = (genre_id: number): string => {
@@ -18,7 +34,7 @@ export const getTimeText = (running_time: number): string => {
   let result = ""
 
   if (running_time < 60) {
-    result += `${running_time} minutes`
+    result += `${running_time} ${running_time < 2 ? "minute" : "minutes"}`
   } else {
     const hours = Math.floor(running_time / 60)
     const minutes = running_time % 60
@@ -26,7 +42,7 @@ export const getTimeText = (running_time: number): string => {
     result += hours === 1 ? `${hours} hour` : `${hours} hours`
 
     if (minutes > 0) {
-      result += ` ${minutes} minutes`
+      result += ` ${minutes} ${minutes < 2 ? "minute" : "minutes"}`
     }
   }
   return result
@@ -34,3 +50,13 @@ export const getTimeText = (running_time: number): string => {
 
 export const capitalize = (word: string) =>
   word.charAt(0).toUpperCase() + word.slice(1)
+
+export function getAverageRating<T extends { rating: number }>(
+  records: T[] = []
+): number {
+  const ratedRecords = records.filter((r) => r.rating > 0)
+  if (ratedRecords.length === 0) return 0
+
+  const sum = ratedRecords.reduce((total, r) => total + r.rating, 0)
+  return sum / ratedRecords.length
+}

@@ -8,7 +8,11 @@ import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
 import { FcStatistics } from "react-icons/fc"
 import { FaRegClock, FaRegStar, FaStar } from "react-icons/fa"
-import { getRecordTypeEmoji, getTimeText } from "../utils/common"
+import {
+  getAverageRating,
+  getRecordTypeEmoji,
+  getTimeText,
+} from "../utils/common"
 import { IoMdBook } from "react-icons/io"
 import { BsFiles } from "react-icons/bs"
 import RecordTypeDoughnutChart from "../components/ui/RecordTypeDoughnutChart"
@@ -58,14 +62,7 @@ export default function Home() {
     }, 0)
   }, [records])
 
-  const avgRating = useMemo(() => {
-    const rated = records?.filter((r) => r.rating > 0) || []
-
-    if (rated.length === 0) return 0
-
-    const sum = rated.reduce((sum, r) => sum + r.rating, 0)
-    return sum / rated.length
-  }, [records])
+  const avgRating = useMemo(() => getAverageRating(records || []), [records])
 
   const watchTime = useMemo((): number => {
     let totalMinutes: number = 0
