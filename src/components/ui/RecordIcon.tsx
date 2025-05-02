@@ -1,6 +1,6 @@
 import { JSX } from "react"
 import { getRecordTypeName } from "../../utils/common"
-import { BiSolidBook, BiSolidCameraMovie } from "react-icons/bi"
+import { BiSolidBook, BiSolidCameraMovie, BiSolidTv } from "react-icons/bi"
 
 type RecordIconProps = {
   typeId: number
@@ -12,8 +12,8 @@ export default function RecordIcon({ typeId }: RecordIconProps) {
   const iconMap: Record<"book" | "movie" | "drama", JSX.Element> = {
     book: <BiSolidBook />,
     movie: <BiSolidCameraMovie />,
-    drama: <BiSolidCameraMovie />,
+    drama: <BiSolidTv />,
   }
 
-  return iconMap[typeName] ?? <BiSolidBook />
+  return <span data-testid="record-icon">{iconMap[typeName] ?? null}</span>
 }
