@@ -31,10 +31,12 @@ export const getGenreName = (genre_id: number): string => {
 }
 
 export const getTimeText = (running_time: number): string => {
+  if (running_time === 0) return ""
+
   let result = ""
 
   if (running_time < 60) {
-    result += `${running_time} ${running_time < 2 ? "minute" : "minutes"}`
+    result += `${running_time} ${running_time === 1 ? "minute" : "minutes"}`
   } else {
     const hours = Math.floor(running_time / 60)
     const minutes = running_time % 60
@@ -42,9 +44,10 @@ export const getTimeText = (running_time: number): string => {
     result += hours === 1 ? `${hours} hour` : `${hours} hours`
 
     if (minutes > 0) {
-      result += ` ${minutes} ${minutes < 2 ? "minute" : "minutes"}`
+      result += ` ${minutes} ${minutes === 1 ? "minute" : "minutes"}`
     }
   }
+
   return result
 }
 

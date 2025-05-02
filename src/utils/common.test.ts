@@ -92,8 +92,8 @@ describe("getTimeText() returns a human-readable time string based on running_ti
     expect(getTimeText(61)).toBe("1 hour 1 minute")
   })
 
-  test("should return '0 minute' when running_time is 0", () => {
-    expect(getTimeText(0)).toBe("0 minute")
+  test("should return an empty string when running_time is 0", () => {
+    expect(getTimeText(0)).toBe("")
   })
 })
 
