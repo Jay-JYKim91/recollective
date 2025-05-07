@@ -28,22 +28,35 @@ export default function StarRatingForm({
         {Array.from({ length: 5 }, (_, i) => {
           let icon
           if (displayRating >= i + 1) {
-            icon = <FaStar />
+            icon = (
+              <FaStar data-testid={`star-${i + 1}`} data-icon="full-star" />
+            )
           } else if (displayRating >= i + 0.5) {
-            icon = <FaStarHalfAlt />
+            icon = (
+              <FaStarHalfAlt
+                data-testid={`star-${i + 1}`}
+                data-icon="half-star"
+              />
+            )
           } else {
-            icon = <FaRegStar />
+            icon = (
+              <FaRegStar data-testid={`star-${i + 1}`} data-icon="empty-star" />
+            )
           }
 
           return (
             <div key={i} className="relative text-yellow-400 text-xl w-6 h-6">
               <div
+                role="button"
+                aria-label={`Set rating to ${i + 0.5}`}
                 className="absolute left-0 top-0 w-1/2 h-full z-10"
                 onMouseEnter={() => handleMouseEnter(i, true)}
                 onClick={() => handleClick(i, true)}
                 onMouseLeave={() => setHoverRating(null)}
               ></div>
               <div
+                role="button"
+                aria-label={`Set rating to ${i + 1}`}
                 className="absolute right-0 top-0 w-1/2 h-full z-10"
                 onMouseEnter={() => handleMouseEnter(i, false)}
                 onClick={() => handleClick(i, false)}
