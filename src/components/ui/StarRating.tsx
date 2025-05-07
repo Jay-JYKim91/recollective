@@ -8,11 +8,11 @@ export default function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-1 items-center text-yellow-400">
       {Array.from({ length: fullStars }, (_, i) => (
-        <FaStar key={i} />
+        <FaStar data-testid="full-star" key={`full-${i}`} />
       ))}
-      {hasHalfStar && <FaStarHalfAlt />}
+      {hasHalfStar && <FaStarHalfAlt data-testid="half-star" />}
       {Array.from({ length: emptyStars }, (_, i) => (
-        <FaRegStar key={i} />
+        <FaRegStar data-testid="empty-star" key={`empty-${i}`} />
       ))}
     </div>
   )
