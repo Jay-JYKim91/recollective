@@ -4,7 +4,7 @@ export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://recollective-five.vercel.app/home",
+      redirectTo: "https://recollective-five.vercel.app/auth/callback",
       // redirectTo: `${window.location.origin}/home`,
     },
   })
