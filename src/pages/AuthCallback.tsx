@@ -6,20 +6,25 @@ export default function AuthCallback() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const url = new URL(window.location.href)
-    const code = url.searchParams.get("code")
+    const handleAuth = async () => {
+      const url = new URL(window.location.href)
+      const code = url.searchParams.get("code")
 
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code)
         if (error) {
           console.error("Session exchange failed:", error.message)
+          navigate("/")
+          return
         }
         navigate("/home")
-      })
-    } else {
-      console.error("No auth code found in URL.")
-      navigate("/")
+      } else {
+        console.error("No auth code found in URL.")
+        navigate("/")
+      }
     }
+
+    handleAuth()
   }, [navigate])
 
   return <p>Redirecting...</p>
