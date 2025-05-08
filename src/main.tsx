@@ -12,6 +12,7 @@ import AddRecord from "./pages/AddRecord.tsx"
 import RecordDetail from "./pages/RecordDetail.tsx"
 import EditRecord from "./pages/EditRecord.tsx"
 import QueryProvider from "./contexts/QueryProvider.tsx"
+import AuthCallback from "./pages/AuthCallback.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route index element={<App />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route element={<ProtectedLayout />}>
               <Route path="home" element={<Home />} />
               <Route path="records" element={<Records />} />
