@@ -9,24 +9,27 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const handleAuth = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (session) {
+        await refreshUser()
+        navigate("/home")
+        return
+      }
+
       const url = new URL(window.location.href)
       const code = url.searchParams.get("code")
-
-      if (!code) {
-        navigate("/")
-        return
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code)
+        if (!error) {
+          await refreshUser()
+          navigate("/home")
+          return
+        }
       }
 
-      const { error } = await supabase.auth.exchangeCodeForSession(code)
-      if (error) {
-        console.error("Session exchange failed:", error.message)
-        navigate("/")
-        return
-      }
-
-      await refreshUser()
-
-      navigate("/home")
+      navigate("/")
     }
 
     handleAuth()
