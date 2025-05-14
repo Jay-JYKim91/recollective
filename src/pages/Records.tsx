@@ -148,7 +148,7 @@ export default function Records() {
                   {(isFiltering ? filteredRecords : records)?.map((record) => (
                     <li
                       key={record.id}
-                      className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 cursor-pointer"
+                      className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
                       onClick={() => navigate(`/records/${record.id}`)}
                     >
                       <div className="flex flex-col">
