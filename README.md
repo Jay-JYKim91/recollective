@@ -26,6 +26,28 @@ It doesn’t just store your memories — it gives you insights, like total page
 
 ---
 
+## 🖼️ Demo
+
+Here’s a quick preview of Recollective in action:
+
+### ✅ Adding and Managing Records
+
+![Adding and Managing Records](/docs/Adding_and_Managing_Records.gif)
+
+### ✅ Filtering Records by Year, Type, and Rating
+
+![Filtering Records](/docs/Filtering_Records.gif)
+
+### ✅ Viewing Statistics
+
+![Viewing Statistics](/docs/Viewing_Statistics.gif)
+
+### ✅ Dark Mode Support
+
+![Dark Mode Support](/docs/Dark_Mode_Support.gif)
+
+---
+
 ## 🛠 Tech Stack
 
 - **Frontend**: React, TypeScript, Tailwind CSS, DaisyUI, React Query
