@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../lib/supabase"
 import { useAuth } from "../hooks/useAuth"
+import Header from "../components/Header"
 
 export default function AuthCallback() {
   const navigate = useNavigate()
@@ -35,5 +36,17 @@ export default function AuthCallback() {
     handleAuth()
   }, [navigate, refreshUser])
 
-  return <p>Redirecting...</p>
+  return (
+    <div>
+      {/* <Header /> */}
+      <main className="px-8 py-6">
+        <div>
+          <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
+            <p>Redirecting...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+  // return <p>Redirecting...</p>
 }
