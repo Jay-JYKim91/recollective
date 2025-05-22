@@ -38,7 +38,6 @@ export default function AuthCallback() {
 
   return (
     <div>
-      {/* <Header /> */}
       <main className="px-8 py-6">
         <div>
           <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
@@ -48,5 +47,4 @@ export default function AuthCallback() {
       </main>
     </div>
   )
-  // return <p>Redirecting...</p>
 }

@@ -9,12 +9,15 @@ import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
 import { RECORD_TYPES } from "../constants/record_types"
 import { capitalize } from "../utils/common"
+import { FaRegArrowAltCircleDown, FaRegArrowAltCircleUp } from "react-icons/fa"
 
 type FilterType = {
   year: string
   record_type: string
   rating: string
 }
+
+const INITIAL_FILTER = { year: "", record_type: "", rating: "" }
 
 export default function Records() {
   const navigate = useNavigate()
@@ -23,11 +26,8 @@ export default function Records() {
   const { data: records, isLoading } = useUserRecords(user?.user_id || "")
   const [showToast, setShowToast] = useState(false)
   const toastMessage = usePageToast(setShowToast)
-  const [filters, setFilters] = useState<FilterType>({
-    year: "",
-    record_type: "",
-    rating: "",
-  })
+  const [filters, setFilters] = useState<FilterType>(INITIAL_FILTER)
+  const [isAscending, setIsAscending] = useState<boolean>(false)
 
   const yearOptions = useMemo(() => {
     const yearSet = new Set<number>()
@@ -42,10 +42,6 @@ export default function Records() {
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
-
-  const handleFilterReset = () => {
-    setFilters(() => ({ year: "", record_type: "", rating: "" }))
   }
 
   const filteredRecords = useMemo(() => {
@@ -66,6 +62,19 @@ export default function Records() {
   }, [records, filters])
 
   const isFiltering = filters.rating || filters.record_type || filters.year
+
+  const sortedRecords = useMemo(() => {
+    const baseRecords = isFiltering ? filteredRecords : records
+
+    if (!baseRecords) return []
+
+    return [...baseRecords].sort((a, b) => {
+      const dateA = new Date(a.date).getTime()
+      const dateB = new Date(b.date).getTime()
+
+      return isAscending ? dateA - dateB : dateB - dateA
+    })
+  }, [isAscending, isFiltering, records, filteredRecords])
 
   return (
     <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
@@ -137,15 +146,28 @@ export default function Records() {
                 <button
                   type="button"
                   className="w-[47.5%] md:flex-1 btn btn-warning"
-                  onClick={handleFilterReset}
+                  onClick={() => setFilters(() => INITIAL_FILTER)}
                 >
                   Reset
                 </button>
+                <div className="w-[47.5%] md:hidden"></div>
+                <button
+                  type="button"
+                  className="w-[47.5%] md:flex-1 btn "
+                  onClick={() => setIsAscending((prev) => !prev)}
+                >
+                  Date
+                  {isAscending ? (
+                    <FaRegArrowAltCircleUp />
+                  ) : (
+                    <FaRegArrowAltCircleDown />
+                  )}
+                </button>
               </div>
 
-              {((isFiltering ? filteredRecords : records) || [])?.length > 0 ? (
+              {sortedRecords?.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
-                  {(isFiltering ? filteredRecords : records)?.map((record) => (
+                  {sortedRecords.map((record) => (
                     <li
                       key={record.id}
                       className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
