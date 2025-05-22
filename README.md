@@ -16,6 +16,8 @@ It doesn’t just store your memories — it gives you insights, like total page
 - 📌 **Record Tracking**
   - Add a record by selecting a type (book, movie, drama)
   - Edit / delete records
+  - Filter records by year, type, and rating
+  - Sort records by date (ascending / descending)
 - ⭐ **Rating System**
   - Interactive 5-star rating component
 - 📊 **Statistics**
@@ -36,9 +38,9 @@ Here’s a quick preview of Recollective in action:
 
 ![Adding and Managing Records](/docs/Adding_and_Managing_Records.gif)
 
-### ✅ Filtering Records by Year, Type, and Rating
+### ✅ Filtering and Sorting Records
 
-![Filtering Records](/docs/Filtering_Records.gif)
+![Filtering Records](/docs/Filtering_and_Sorting.gif)
 
 ### ✅ Viewing Statistics
 
@@ -89,9 +91,6 @@ Here’s a quick preview of Recollective in action:
 ---
 
 ## 📊 Future Improvements
-
-- 🔽 **Sorting Options for Records**  
-  Add the ability to sort records by date (ascending and descending) to improve browsing flexibility.
 
 - ♿ **Accessibility Enhancements**  
   Improve keyboard navigation, focus states, and ARIA roles to make the app more accessible to all users.
