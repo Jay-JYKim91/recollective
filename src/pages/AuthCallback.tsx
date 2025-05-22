@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../lib/supabase"
 import { useAuth } from "../hooks/useAuth"
-import Header from "../components/Header"
 
 export default function AuthCallback() {
   const navigate = useNavigate()
