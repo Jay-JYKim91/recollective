@@ -1,7 +1,6 @@
 import { FetchedRecordType } from "../../types/types"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
 import { Doughnut } from "react-chartjs-2"
-import LoadingCircle from "./LoadingCircle"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -12,8 +11,6 @@ type RecordTypeDoughnutChartProps = {
 export default function RecordTypeDoughnutChart({
   records,
 }: RecordTypeDoughnutChartProps) {
-  if (!records) return <LoadingCircle />
-
   const recordTypeCounts = {
     book: 0,
     drama: 0,

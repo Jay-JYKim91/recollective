@@ -49,7 +49,7 @@ const mockUseQueryResult = {
   status: "success",
 } as unknown as UseQueryResult<{ genre_id: number }[], Error>
 
-describe("RecordGenreRadarChart() renders radar chart with corrent data", () => {
+describe("RecordGenreRadarChart() renders radar chart with correct data", () => {
   beforeEach(() => {
     jest
       .spyOn(useStatsHook, "useGenreStats")
@@ -61,7 +61,7 @@ describe("RecordGenreRadarChart() renders radar chart with corrent data", () => 
     expect(screen.getByTestId("mock-radar")).toBeInTheDocument()
   })
 
-  test("should pass corrent labels and datasets to Radar", () => {
+  test("should pass correct labels and datasets to Radar", () => {
     render(<RecordGenreRadarChart userId="userId" />)
     const chartData = JSON.parse(screen.getByTestId("chart-data").textContent!)
 
