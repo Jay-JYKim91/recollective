@@ -3,7 +3,7 @@ import { useRecords } from "../hooks/useRecords"
 import { useAuth } from "../hooks/useAuth"
 import RecordIcon from "../components/ui/RecordIcon"
 import StarRating from "../components/ui/StarRating"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { usePageToast } from "../hooks/usePageToast"
 import Toast from "../components/ui/Toast"
 import LoadingCircle from "../components/ui/LoadingCircle"
@@ -11,70 +11,54 @@ import { RECORD_TYPES } from "../constants/record_types"
 import { capitalize } from "../utils/common"
 import { FaRegArrowAltCircleDown, FaRegArrowAltCircleUp } from "react-icons/fa"
 
-type FilterType = {
+export type FilterType = {
   year: string
   record_type: string
   rating: string
 }
 
 const INITIAL_FILTER = { year: "", record_type: "", rating: "" }
+const PAGE_SIZE = 10
 
 export default function Records() {
   const navigate = useNavigate()
-  const { useUserRecords } = useRecords()
+  const [page, setPage] = useState<number>(1)
+  const [isAscending, setIsAscending] = useState<boolean>(false)
+  const [filters, setFilters] = useState<FilterType>(INITIAL_FILTER)
+  const { usePaginatedUserRecords, useRecordYears } = useRecords()
   const { user } = useAuth()
-  const { data: records, isLoading } = useUserRecords(user?.user_id || "")
+  const { data: { data: records = [], count = 0 } = {}, isLoading } =
+    usePaginatedUserRecords(
+      user?.user_id || "",
+      page,
+      PAGE_SIZE,
+      isAscending,
+      filters
+    )
+  const { data: allDates = [] } = useRecordYears(user?.user_id || "")
   const [showToast, setShowToast] = useState(false)
   const toastMessage = usePageToast(setShowToast)
-  const [filters, setFilters] = useState<FilterType>(INITIAL_FILTER)
-  const [isAscending, setIsAscending] = useState<boolean>(false)
+
+  const totalPage = count ? Math.ceil(count / PAGE_SIZE) : 1
 
   const yearOptions = useMemo(() => {
     const yearSet = new Set<number>()
 
-    records?.forEach((record) => {
+    allDates.forEach((record) => {
       const year = new Date(record.date).getFullYear()
       yearSet.add(year)
     })
 
     return Array.from(yearSet).sort((a, b) => b - a)
-  }, [records])
+  }, [allDates])
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const filteredRecords = useMemo(() => {
-    return records
-      ?.filter((record) =>
-        filters.year
-          ? new Date(record.date).getFullYear() === Number(filters.year)
-          : true
-      )
-      .filter((record) =>
-        filters.record_type
-          ? record.type_id === Number(filters.record_type)
-          : true
-      )
-      .filter((record) =>
-        filters.rating ? record.rating >= Number(filters.rating) : true
-      )
-  }, [records, filters])
-
-  const isFiltering = filters.rating || filters.record_type || filters.year
-
-  const sortedRecords = useMemo(() => {
-    const baseRecords = isFiltering ? filteredRecords : records
-
-    if (!baseRecords) return []
-
-    return [...baseRecords].sort((a, b) => {
-      const dateA = new Date(a.date).getTime()
-      const dateB = new Date(b.date).getTime()
-
-      return isAscending ? dateA - dateB : dateB - dateA
-    })
-  }, [isAscending, isFiltering, records, filteredRecords])
+  useEffect(() => {
+    setPage(1)
+  }, [filters])
 
   return (
     <div className="max-w-3xl mx-auto md:mt-10 md:px-4">
@@ -165,33 +149,55 @@ export default function Records() {
                 </button>
               </div>
 
-              {sortedRecords?.length > 0 ? (
-                <ul className="divide-y divide-gray-200">
-                  {sortedRecords.map((record) => (
-                    <li
-                      key={record.id}
-                      className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
-                      onClick={() => navigate(`/records/${record.id}`)}
-                    >
-                      <div className="flex flex-col">
-                        <div className="flex items-center">
-                          <span className="mr-2">
-                            <RecordIcon typeId={record.type_id} />
-                          </span>
-                          <span className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs">
-                            {record.title}
+              {records?.length > 0 ? (
+                <>
+                  <ul className="divide-y divide-gray-200">
+                    {records.map((record) => (
+                      <li
+                        key={record.id}
+                        className="flex justify-between items-center py-2 md:px-4 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
+                        onClick={() => navigate(`/records/${record.id}`)}
+                      >
+                        <div className="flex flex-col">
+                          <div className="flex items-center">
+                            <span className="mr-2">
+                              <RecordIcon typeId={record.type_id} />
+                            </span>
+                            <span className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs">
+                              {record.title}
+                            </span>
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {record.date}
                           </span>
                         </div>
-                        <span className="text-sm text-gray-500">
-                          {record.date}
-                        </span>
-                      </div>
-                      <div className="text-sm text-gray-700">
-                        <StarRating rating={record.rating} />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                        <div className="text-sm text-gray-700">
+                          <StarRating rating={record.rating} />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex justify-center items-center gap-2 mt-6">
+                    <button
+                      className="btn"
+                      disabled={page === 1}
+                      onClick={() => setPage(page - 1)}
+                    >
+                      Prev
+                    </button>
+                    <span>
+                      {page} / {totalPage}
+                    </span>
+
+                    <button
+                      className="btn"
+                      disabled={!records || records.length < PAGE_SIZE}
+                      onClick={() => setPage(page + 1)}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </>
               ) : (
                 <p className="text-center text-gray-500 py-8">
                   No records match your filters.

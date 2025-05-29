@@ -6,9 +6,27 @@ import {
 } from "@tanstack/react-query"
 import { supabase } from "../lib/supabase"
 import { FetchedRecordType, RecordType } from "../types/types"
+import { FilterType } from "../pages/Records"
+
+const PAGE_SIZE = 10
 
 export const useRecords = () => {
   const queryClient = useQueryClient()
+
+  const useRecordYears = (userId: string) =>
+    useQuery({
+      queryKey: ["record_years", userId],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("records")
+          .select("date")
+          .eq("user_id", userId)
+
+        if (error) throw error
+        return data as { date: string }[]
+      },
+      enabled: !!userId,
+    })
 
   const useUserRecords = (
     userId: string
@@ -24,6 +42,48 @@ export const useRecords = () => {
 
         if (error) throw error
         return data
+      },
+      enabled: !!userId,
+    })
+
+  const usePaginatedUserRecords = (
+    userId: string,
+    page: number,
+    pageSize: number = PAGE_SIZE,
+    isAscending: boolean = false,
+    filters: FilterType
+  ): UseQueryResult<{ data: FetchedRecordType[]; count: number }> =>
+    useQuery({
+      queryKey: ["records", userId, page, pageSize, isAscending, filters],
+      queryFn: async () => {
+        const from = (page - 1) * pageSize
+        const to = from + pageSize - 1
+
+        let query = supabase
+          .from("records")
+          .select("*", { count: "exact" })
+          .eq("user_id", userId)
+          .order("date", { ascending: isAscending })
+          .range(from, to)
+
+        if (filters.year) {
+          const start = `${filters.year}-01-01`
+          const end = `${filters.year}-12-31`
+          query = query.gte("date", start).lte("date", end)
+        }
+
+        if (filters.record_type) {
+          query = query.eq("type_id", Number(filters.record_type))
+        }
+
+        if (filters.rating) {
+          query = query.gte("rating", Number(filters.rating))
+        }
+
+        const { data, count, error } = await query
+
+        if (error) throw error
+        return { data, count }
       },
       enabled: !!userId,
     })
@@ -153,5 +213,13 @@ export const useRecords = () => {
     },
   })
 
-  return { addRecord, useUserRecords, useRecord, deleteRecord, updateRecord }
+  return {
+    addRecord,
+    useRecordYears,
+    useUserRecords,
+    usePaginatedUserRecords,
+    useRecord,
+    deleteRecord,
+    updateRecord,
+  }
 }
