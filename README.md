@@ -38,9 +38,9 @@ Here’s a quick preview of Recollective in action:
 
 ![Adding and Managing Records](/docs/Adding_and_Managing_Records.gif)
 
-### ✅ Filtering and Sorting Records
+### ✅ Pagination, Filtering, and Sorting Records
 
-![Filtering Records](/docs/Filtering_and_Sorting.gif)
+![Filtering Records](/docs/Pagination_Filtering_and_Sorting_Records.gif)
 
 ### ✅ Viewing Statistics
 
@@ -88,6 +88,12 @@ Here’s a quick preview of Recollective in action:
   Then I moved on to small UI components in `components/ui`, practicing how to write rendering tests using React Testing Library.  
   I'm gradually expanding test coverage and becoming more comfortable with writing tests in my development process.
 
+- 📄 **Implementing Pagination, Filtering, and Sorting Together**  
+  To ensure a smooth user experience for those who might store a large number of records—and to future-proof the app for scalability—I moved away from client-side filtering and sorting.
+  I refactored the record list to use server-side pagination, which required coordinating pagination, filtering, and sorting parameters in each query.
+  This process taught me how to design React Query keys for effective cache invalidation and how to build flexible Supabase queries that support multiple dynamic conditions.
+  I also encountered interesting UX edge cases, such as distinguishing between “no records at all” and “no records matching the current filters.” To solve this, I implemented a custom hook called `useUserRecordsCount` that fetches only the total record count using `.select("*", { count: "exact", head: true })`, minimizing network overhead while providing accurate feedback in each scenario.
+
 ---
 
 ## 📊 Future Improvements
@@ -103,6 +109,3 @@ Here’s a quick preview of Recollective in action:
 
 - 🧪 **Increase Test Coverage**  
   Continue expanding test coverage to include more components, edge cases, and integration scenarios for higher reliability.
-
-- 🔄 **Pagination or Infinite Scroll for Record Lists**  
-  As the number of records grows, implement pagination or infinite scrolling to improve performance and user experience when browsing the list.
