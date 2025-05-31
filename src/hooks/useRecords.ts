@@ -28,6 +28,21 @@ export const useRecords = () => {
       enabled: !!userId,
     })
 
+  const useUserRecordsCount = (userId: string) =>
+    useQuery({
+      queryKey: ["records_count", userId],
+      queryFn: async () => {
+        const { count, error } = await supabase
+          .from("records")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", userId)
+
+        if (error) throw error
+        return count ?? 0
+      },
+      enabled: !!userId,
+    })
+
   const useUserRecords = (
     userId: string
   ): UseQueryResult<FetchedRecordType[]> =>
@@ -216,6 +231,7 @@ export const useRecords = () => {
   return {
     addRecord,
     useRecordYears,
+    useUserRecordsCount,
     useUserRecords,
     usePaginatedUserRecords,
     useRecord,

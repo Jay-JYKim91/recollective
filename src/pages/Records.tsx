@@ -22,11 +22,17 @@ const PAGE_SIZE = 10
 
 export default function Records() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const { usePaginatedUserRecords, useRecordYears, useUserRecordsCount } =
+    useRecords()
+
   const [page, setPage] = useState<number>(1)
   const [isAscending, setIsAscending] = useState<boolean>(false)
   const [filters, setFilters] = useState<FilterType>(INITIAL_FILTER)
-  const { usePaginatedUserRecords, useRecordYears } = useRecords()
-  const { user } = useAuth()
+  const [showToast, setShowToast] = useState(false)
+
+  const toastMessage = usePageToast(setShowToast)
+
   const { data: { data: records = [], count = 0 } = {}, isLoading } =
     usePaginatedUserRecords(
       user?.user_id || "",
@@ -35,12 +41,12 @@ export default function Records() {
       isAscending,
       filters
     )
+  const { data: totalUserRecordsCount = 0 } = useUserRecordsCount(
+    user?.user_id || ""
+  )
   const { data: allDates = [] } = useRecordYears(user?.user_id || "")
-  const [showToast, setShowToast] = useState(false)
-  const toastMessage = usePageToast(setShowToast)
 
   const totalPage = count ? Math.ceil(count / PAGE_SIZE) : 1
-
   const yearOptions = useMemo(() => {
     const yearSet = new Set<number>()
 
@@ -80,7 +86,7 @@ export default function Records() {
             </button>
           </div>
 
-          {!records || records.length === 0 ? (
+          {totalUserRecordsCount === 0 ? (
             <>
               <p className="font-body text-center text-lg">
                 You haven't recorded anything yet!
@@ -149,7 +155,11 @@ export default function Records() {
                 </button>
               </div>
 
-              {records?.length > 0 ? (
+              {records.length === 0 ? (
+                <p className="text-center text-gray-500 py-8">
+                  No records match your filters.
+                </p>
+              ) : (
                 <>
                   <ul className="divide-y divide-gray-200">
                     {records.map((record) => (
@@ -198,10 +208,6 @@ export default function Records() {
                     </button>
                   </div>
                 </>
-              ) : (
-                <p className="text-center text-gray-500 py-8">
-                  No records match your filters.
-                </p>
               )}
             </>
           )}
